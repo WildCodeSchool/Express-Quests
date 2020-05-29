@@ -129,6 +129,22 @@ app.get("/api/user", (req, res) => {
   res.status(401).send("Unauthorized");
 });
 
+app.get("/api/users/:id", (req, res) => {
+  const idUser = req.params.id;
+  connection.query(
+    "SELECT * FROM users WHERE id = ?",
+    [idUser],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("😱 Error deleting a movie");
+      } else {
+        res.status(200).json(results[0]);
+      }
+    }
+  );
+});
+
 // Post route for users
 app.post("/api/users", (req, res) => {
   const { firstname, lastname, email } = req.body;
