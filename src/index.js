@@ -106,6 +106,23 @@ app.post("/api/movies", (req, res) => {
   );
 });
 
+app.delete("/api/movies/:id", (req, res) => {
+  const idMovie = req.params.id;
+
+  connection.query(
+    "DELETE FROM movies WHERE id = ?",
+    [idMovie],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("😱 Error deleting a movie");
+      } else {
+        res.status(200).send("🎉 Movie deleted!");
+      }
+    }
+  );
+});
+
 app.get("/api/user", (req, res) => {
   res.status(401).send("Unauthorized");
 });
