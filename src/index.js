@@ -106,6 +106,27 @@ app.post("/api/movies", (req, res) => {
   );
 });
 
+app.get("/api/user", (req, res) => {
+  res.status(401).send("Unauthorized");
+});
+
+// Post route for users
+app.post("/api/users", (req, res) => {
+  const { firstname, lastname, email } = req.body;
+  connection.query(
+    "INSERT INTO users(firstname, lastname, email) VALUES(?, ?, ?)",
+    [firstname, lastname, email],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error saving a User");
+      } else {
+        res.status(200).send("Successfully saved");
+      }
+    }
+  );
+});
+
 // This route will update a user in the DB
 app.put("/api/users/:id", (req, res) => {
   // We get the ID from the url:
@@ -134,22 +155,18 @@ app.put("/api/users/:id", (req, res) => {
 //   const idMovie = req.body.id;
 // });
 
-app.get("/api/user", (req, res) => {
-  res.status(401).send("Unauthorized");
-});
+app.delete("/api/users/:id", (req, res) => {
+  const idUser = req.params.id;
 
-// Post route for users
-app.post("/api/users", (req, res) => {
-  const { firstname, lastname, email } = req.body;
   connection.query(
-    "INSERT INTO users(firstname, lastname, email) VALUES(?, ?, ?)",
-    [firstname, lastname, email],
+    "DELETE FROM users WHERE id = ?",
+    [idUser],
     (err, results) => {
       if (err) {
         console.log(err);
-        res.status(500).send("Error saving a User");
+        res.status(500).send("😱 Error deleting an user");
       } else {
-        res.status(200).send("Successfully saved");
+        res.status(200).send("🎉 User deleted!");
       }
     }
   );
