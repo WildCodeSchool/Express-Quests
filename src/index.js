@@ -49,6 +49,30 @@ app.get("/api/movies/:id", (req, res) => {
   );
 });
 
+// This route will send back only the movie that matches the Id from the request.params
+// ex: localhost:3000/api/movies/1
+app.put("/api/movies/:id", (req, res) => {
+  // We get the ID from the url:
+  const idMovie = req.params.id;
+
+  // We get the data from the req.body
+  const newMovie = req.body;
+
+  // We send a UPDATE query to the DB
+  connection.query(
+    "UPDATE movies SET ? WHERE id = ?",
+    [newMovie, idMovie],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error updating a movie");
+      } else {
+        res.status(200).send("Movie updated successfully 🎉");
+      }
+    }
+  );
+});
+
 // This route will send back the movie that are shorter or equal to the duration specify in the url query string
 // ex: localhost:3000/api/search?duration=120
 app.get("/api/search", (req, res) => {
