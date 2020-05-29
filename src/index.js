@@ -82,6 +82,34 @@ app.post("/api/movies", (req, res) => {
   );
 });
 
+// This route will update a user in the DB
+app.put("/api/users/:id", (req, res) => {
+  // We get the ID from the url:
+  const idUser = req.params.id;
+
+  // We get the data from the req.body
+  const newUser = req.body;
+
+  // We send a UPDATE query to the DB
+  connection.query(
+    "UPDATE users SET ? WHERE id = ?",
+    [newUser, idUser],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error updating a user");
+      } else {
+        res.status(200).send("User updated successfully 🎉");
+      }
+    }
+  );
+});
+
+// // the ID is passed as information in the change form
+// app.put("/api/users", (req, res) => {
+//   const idMovie = req.body.id;
+// });
+
 app.get("/api/user", (req, res) => {
   res.status(401).send("Unauthorized");
 });
