@@ -70,5 +70,5 @@ app.get("/api/user", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server is runing on 8080`);
+  console.log(`Server is runing on 3000`);
 });
