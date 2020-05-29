@@ -37,7 +37,8 @@ app.get("/api/movies", (req, res) => {
 // ex: localhost:3000/api/movies/1
 app.get("/api/movies/:id", (req, res) => {
   connection.query(
-    `SELECT * from movies WHERE id=${req.params.id}`,
+    `SELECT * from movies WHERE id=?`,
+    [req.params.id],
     (err, results) => {
       if (err) {
         console.log(err);
@@ -77,7 +78,8 @@ app.put("/api/movies/:id", (req, res) => {
 // ex: localhost:3000/api/search?duration=120
 app.get("/api/search", (req, res) => {
   connection.query(
-    `SELECT * from movies WHERE duration<=${req.query.maxDuration}`,
+    `SELECT * from movies WHERE duration<=?`,
+    [req.query.maxDuration],
     (err, results) => {
       if (err) {
         console.log(err);
