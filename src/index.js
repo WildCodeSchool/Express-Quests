@@ -50,7 +50,7 @@ app.get("/api/movies/:id", (req, res) => {
 // ex: localhost:3000/api/search?duration=120
 app.get("/api/search", (req, res) => {
   connection.query(
-    `SELECT * from movies WHERE duration <= ${req.query.maxDuration}`,
+    `SELECT * from movies WHERE duration <= ${req.query.durationMax}`,
     (err, results) => {
       if (err) {
         console.log(err);
