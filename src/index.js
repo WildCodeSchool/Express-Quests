@@ -128,6 +128,21 @@ app.delete("/api/movies/:id", (req, res) => {
 app.get("/api/user", (req, res) => {
   res.status(401).send("Unauthorized");
 });
+app.get("/api/users/:id", (req, res) => {
+  const idUser = req.params.id;
+  connection.query(
+    "SELECT * FROM users WHERE id = ?",
+    [idUser],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("😱 Error deleting a movie");
+      } else {
+        res.status(200).json(results);
+      }
+    }
+  );
+});
 
 // Post route for users
 app.post("/api/users", (req, res) => {
@@ -185,7 +200,12 @@ app.delete("/api/users/:id", (req, res) => {
         console.log(err);
         res.status(500).send("😱 Error deleting an user");
       } else {
-        res.status(200).send("🎉 User deleted!");
+        // If the array is empty that's mean the employee is not found
+        if (results.length === 0) {
+          return res.status(404).send("😱User not found");
+        } else {
+          res.status(200).send("🎉 User deleted!");
+        }
       }
     }
   );
