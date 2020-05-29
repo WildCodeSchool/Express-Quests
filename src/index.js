@@ -157,7 +157,7 @@ app.get("/api/users/:id", (req, res) => {
         console.log(err);
         res.status(500).send("😱 Error deleting a movie");
       } else {
-        res.status(200).json(results);
+        res.status(200).json(results[0]);
       }
     }
   );
