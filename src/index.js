@@ -128,6 +128,7 @@ app.delete("/api/movies/:id", (req, res) => {
 app.get("/api/user", (req, res) => {
   res.status(401).send("Unauthorized");
 });
+
 app.get("/api/users/:id", (req, res) => {
   const idUser = req.params.id;
   connection.query(
@@ -138,7 +139,7 @@ app.get("/api/users/:id", (req, res) => {
         console.log(err);
         res.status(500).send("😱 Error deleting a movie");
       } else {
-        res.status(200).json(results);
+        res.status(200).json(results[0]);
       }
     }
   );
