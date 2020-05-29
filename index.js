@@ -1,6 +1,6 @@
 const express = require("express");
 const movies = require("./movies");
-const port = 8080;
+const port = 3000;
 const app = express();
 
 app.get("/", (req, res) => {
@@ -38,5 +38,5 @@ app.get("/api/user", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server is runing on 8080`);
+  console.log(`Server is runing on 3000`);
 });
