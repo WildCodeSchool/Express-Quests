@@ -31,14 +31,18 @@ app.get("/api/movies", (req, res) => {
 });
 
 app.get("/api/movies/:id", (req, res) => {
-  const movie = movies.find((movie) => {
-    return movie.id === Number(req.params.id);
-  });
-  if (movie) {
-    res.status(200).json(movie);
-  } else {
-    res.status(404).send("Not found");
-  }
+  connection.query(
+    "SELECT * from movies WHERE id=?",
+    [req.params.id],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error retrieving data");
+      } else {
+        res.status(200).json(results);
+      }
+    }
+  );
 });
 
 app.get("/api/search", (req, res) => {
