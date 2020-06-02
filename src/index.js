@@ -65,7 +65,7 @@ app.get("/api/search", (req, res) => {
 });
 
 // This route will send back Unauthorized
-app.get("/api/user", (req, res) => {
+app.get("/api/users", (req, res) => {
   res.status(401).send("Unauthorized");
 });
 
