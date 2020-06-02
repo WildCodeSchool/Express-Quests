@@ -84,7 +84,7 @@ app.post("/api/movies", (req, res) => {
   );
 });
 
-app.get("/api/user", (req, res) => {
+app.get("/api/users", (req, res) => {
   res.status(401).send("Unauthorized");
 });
 
