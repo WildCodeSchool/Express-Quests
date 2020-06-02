@@ -125,7 +125,7 @@ app.delete("/api/movies/:id", (req, res) => {
   );
 });
 
-app.get("/api/user", (req, res) => {
+app.get("/api/users", (req, res) => {
   res.status(401).send("Unauthorized");
 });
 
