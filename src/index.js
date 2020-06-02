@@ -112,7 +112,7 @@ app.put("/api/users/:id", (req, res) => {
 //   const idMovie = req.body.id;
 // });
 
-app.get("/api/user", (req, res) => {
+app.get("/api/users", (req, res) => {
   res.status(401).send("Unauthorized");
 });
 
