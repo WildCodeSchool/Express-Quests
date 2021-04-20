@@ -6,7 +6,7 @@ This repo is used for Wild Code School Express quests
 ```sh
 npm i
 ```
-## Create your environnement variables
+## Create your environment variables
 
 Create a copy of the `.env.sample` file named `.env` : 
 
