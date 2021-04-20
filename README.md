@@ -1,12 +1,32 @@
-# Express-Quest-01
+This repo is used for Wild Code School Express quests
 
-This repo is used for express quests 1 - 6
+# Setup
 
-## Installation
+## Install dependencies
+```sh
+npm i
+```
+## Create your environnement variables
 
-### `npm install`
-Download the folder and run npm install to install all the node packages
+Create a copy of the `.env.sample` file named `.env` : 
 
-## Run
-### `npm start`
-You can run this project using npm start
+```
+cp .env.sample .env
+```
+
+Then adjust varibales in `.env` to match your own environment.
+
+# Run the app
+
+When developping, to automatically restart the server on file changes : 
+
+```sh
+npm run dev
+```
+
+If you don't need automatic reloadings, you can just : 
+
+```sh
+npm start
+```
+

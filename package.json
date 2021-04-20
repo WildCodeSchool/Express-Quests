@@ -1,10 +1,13 @@
 {
-  "name": "express-quest-01",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "express-quests",
+  "repository": {
+    "url": "https://github.com/WildCodeSchool/Express-Quests"
+  },
+  "version": "0.0.1",
+  "main": "app.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
