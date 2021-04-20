@@ -68,6 +68,40 @@ app.post('/api/users', (req, res) => {
   );
 });
 
+app.put('/api/users/:id', (req, res) => {
+  const userId = req.params.id;
+  const userPropsToUpdate = req.body;
+  connection.query(
+    'UPDATE users SET ? WHERE id = ?',
+    [userPropsToUpdate, userId],
+    (err) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send('Error updating a user');
+      } else {
+        res.status(200).send('User updated successfully 🎉');
+      }
+    }
+  );
+});
+
+app.put('/api/movies/:id', (req, res) => {
+  const userId = req.params.id;
+  const moviePropsToUpdate = req.body;
+  connection.query(
+    'UPDATE movies SET ? WHERE id = ?',
+    [moviePropsToUpdate, userId],
+    (err) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send('Error updating a movie');
+      } else {
+        res.status(200).send('Movie updated successfully 🎉');
+      }
+    }
+  );
+});
+
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
