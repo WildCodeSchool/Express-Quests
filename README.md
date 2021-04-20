@@ -14,7 +14,7 @@ Create a copy of the `.env.sample` file named `.env` :
 cp .env.sample .env
 ```
 
-Then adjust varibales in `.env` to match your own environment.
+Then adjust variables in `.env` to match your own environment.
 
 # Run the app
 
