@@ -34,6 +34,22 @@ app.get('/api/users', (req, res) => {
   });
 });
 
+app.get('/api/users/:id', (req, res) => {
+  const userId = req.params.id;
+  connection.query(
+    'SELECT * FROM users WHERE id = ?',
+    [userId],
+    (err, results) => {
+      if (err) {
+        res.status(500).send('Error retrieving users from database');
+      } else {
+        if (results.length) res.json(results[0]);
+        else res.status(404).send('user not found');
+      }
+    }
+  );
+});
+
 app.post('/api/movies', (req, res) => {
   const { title, director, year, color, duration } = req.body;
   connection.query(

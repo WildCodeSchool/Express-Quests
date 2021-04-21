@@ -53,10 +53,53 @@ CREATE TABLE `users` (
     `firstname` varchar(255) NOT NULL,
     `lastname` varchar(255) NOT NULL,
     `email` varchar(255) NOT NULL,
+    `city` varchar(255) DEFAULT NULL,
+    `language` varchar(255) DEFAULT NULL,
     PRIMARY KEY (`id`)
-  ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+  ) ENGINE = InnoDB AUTO_INCREMENT = 7 DEFAULT CHARSET = utf8;
 INSERT INTO
-  `users` (firstname, lastname, email)
+  `users`
 VALUES
-  ('John', 'Doe', 'john.doe@wildcodeschool.com'),
-  ('Jane', 'Doe', 'jane.doe@wildcodeschool.com');
+  (
+    1,
+    'John',
+    'Doe',
+    'john.doe@wildcodeschool.com',
+    'Paris',
+    'English'
+  ),(
+    2,
+    'Jane',
+    'Doe',
+    'jane.doe@wildcodeschool.com',
+    'Lyon',
+    'English'
+  ),(
+    3,
+    'Ralf',
+    'Geronimo',
+    'ralf.geronimo@example.com',
+    'New York',
+    'Italian'
+  ),(
+    4,
+    'Maria',
+    'Iskandar',
+    'maria.iskandar@example.com',
+    'Berlin',
+    'German'
+  ),(
+    5,
+    'Valeriy',
+    'Appius',
+    'valeriy.ppius@example.com',
+    'Moscow',
+    'Russian'
+  ),(
+    6,
+    'Johanna',
+    'Martino',
+    'johanna.martino@example.com',
+    'Milan',
+    'Spanish'
+  );
