@@ -86,7 +86,7 @@ VALUES
     'Maria',
     'Iskandar',
     'maria.iskandar@example.com',
-    'Berlin',
+    'New York',
     'German'
   ),(
     5,
