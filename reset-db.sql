@@ -64,16 +64,16 @@ VALUES
     1,
     'John',
     'Doe',
-    'john.doe@wildcodeschool.com',
+    'john.doe@example.com',
     'Paris',
     'English'
   ),(
     2,
-    'Jane',
-    'Doe',
-    'jane.doe@wildcodeschool.com',
-    'Lyon',
-    'English'
+    'Valeriy',
+    'Appius',
+    'valeriy.ppius@example.com',
+    'Moscow',
+    'Russian'
   ),(
     3,
     'Ralf',
@@ -90,11 +90,11 @@ VALUES
     'German'
   ),(
     5,
-    'Valeriy',
-    'Appius',
-    'valeriy.ppius@example.com',
-    'Moscow',
-    'Russian'
+    'Jane',
+    'Doe',
+    'jane.doe@example.com',
+    'London',
+    'English'
   ),(
     6,
     'Johanna',
