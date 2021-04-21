@@ -102,6 +102,22 @@ app.put('/api/movies/:id', (req, res) => {
   );
 });
 
+app.delete('/api/users/:id', (req, res) => {
+  const userId = req.params.id;
+  connection.query(
+    'DELETE FROM users WHERE id = ?',
+    [userId],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send('😱 Error deleting an user');
+      } else {
+        res.status(200).send('🎉 User deleted!');
+      }
+    }
+  );
+});
+
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
