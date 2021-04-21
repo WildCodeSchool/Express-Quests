@@ -151,7 +151,7 @@ app.delete('/api/movies/:id', (req, res) => {
         res.status(500).send('Error deleting a movie');
       } else {
         if (result.affectedRows) res.status(200).send('🎉 Movie deleted!');
-        else res.status(404).send('Movie deleted not found');
+        else res.status(404).send('Movie not found');
       }
     }
   );
