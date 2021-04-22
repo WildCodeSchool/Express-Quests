@@ -52,7 +52,7 @@ CREATE TABLE `users` (
     `id` int NOT NULL AUTO_INCREMENT,
     `firstname` varchar(255) NOT NULL,
     `lastname` varchar(255) NOT NULL,
-    `email` varchar(255) NOT NULL,
+    `email` varchar(255) UNIQUE NOT NULL,
     `city` varchar(255) DEFAULT NULL,
     `language` varchar(255) DEFAULT NULL,
     PRIMARY KEY (`id`)
