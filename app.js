@@ -15,13 +15,43 @@ connection.connect((err) => {
 app.use(express.json());
 
 app.get('/api/movies', (req, res) => {
-  connection.query('SELECT * FROM movies', (err, result) => {
+  let sql = 'SELECT * FROM movies';
+  const sqlValues = [];
+  if (req.query.color) {
+    sql += ' WHERE color = ?';
+    sqlValues.push(req.query.color);
+  }
+  if (req.query.max_duration) {
+    if (req.query.color) sql += ' AND duration <= ? ;';
+    else sql += ' WHERE duration <= ?';
+
+    sqlValues.push(req.query.max_duration);
+  }
+
+  connection.query(sql, sqlValues, (err, results) => {
     if (err) {
-      res.status(500).send('Error retrieving data from database');
+      console.log(err);
+      res.status(500).send('Error retrieving movies from database');
     } else {
-      res.json(result);
+      res.json(results);
     }
   });
+});
+
+app.get('/api/movies/:id', (req, res) => {
+  const movieId = req.params.id;
+  connection.query(
+    'SELECT * FROM movies WHERE id = ?',
+    [movieId],
+    (err, results) => {
+      if (err) {
+        res.status(500).send('Error retrieving movie from database');
+      } else {
+        if (results.length) res.json(results[0]);
+        else res.status(404).send('Movie not found');
+      }
+    }
+  );
 });
 
 app.get('/api/users', (req, res) => {
