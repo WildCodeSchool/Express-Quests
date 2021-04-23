@@ -89,17 +89,35 @@ app.get('/api/users/:id', (req, res) => {
 
 app.post('/api/movies', (req, res) => {
   const { title, director, year, color, duration } = req.body;
-  connection.query(
-    'INSERT INTO movies (title, director, year, color, duration) VALUES (?, ?, ?, ?, ?)',
-    [title, director, year, color, duration],
-    (err, result) => {
-      if (err) {
-        res.status(500).send('Error saving the movie');
-      } else {
-        res.status(201).send('Movie successfully saved');
-      }
-    }
+
+  const { error } = Joi.object({
+    title: Joi.string().max(255).required(),
+    director: Joi.string().max(255).required(),
+    year: Joi.number().min(1888).integer().required(),
+    color: Joi.boolean().required(),
+    duration: Joi.integer().min(0).required(),
+  }).validate(
+    { title, director, year, color, duration },
+    { abortEarly: false }
   );
+
+  if (error) {
+    res.status(422).json({ validationErrors: error.details });
+  } else {
+    connection.query(
+      'INSERT INTO movies (title, director, year, color, duration) VALUES (?, ?, ?, ?, ?)',
+      [title, director, year, color, duration],
+      (err, result) => {
+        if (err) {
+          res.status(500).send('Error saving the movie');
+        } else {
+          const id = result.insertId;
+          const createdMovie = { id, title, director, year, color, duration };
+          res.status(201).json(createdMovie);
+        }
+      }
+    );
+  }
 });
 
 /* Old version : "manual validation" and callbacks 
