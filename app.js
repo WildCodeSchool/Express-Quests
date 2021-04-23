@@ -103,18 +103,50 @@ app.post('/api/movies', (req, res) => {
 
 app.post('/api/users', (req, res) => {
   const { firstname, lastname, email } = req.body;
+  const errors = [];
+  const emailRegex = /[a-z0-9._]+@[a-z0-9-]+\.[a-z]{2,3}/;
+
   connection.query(
-    'INSERT INTO users (firstname, lastname, email) VALUES (?, ?, ?)',
-    [firstname, lastname, email],
-    (err, result) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send('Error saving the user');
-      } else {
-        res.status(201).send('User successfully saved');
-      }
+    'SELECT * FROM users WHERE email = ?',
+    [email],
+
+    (err, selectResult) => {
+      const userExists = selectResult.length > 0;
+      console.log('exists', userExists);
     }
   );
+
+  if (!firstname)
+    errors.push({ field: 'firstname', message: 'This field is required' });
+  else if (firstname.length >= 255)
+    errors.push({
+      field: 'firstname',
+      message: 'Should be less than 255 characters',
+    });
+
+  if (!lastname)
+    errors.push({ field: 'lastname', message: 'This field is required' });
+  if (!email)
+    errors.push({ field: 'email', message: 'This field is required' });
+  if (!emailRegex.test(email))
+    errors.push({ field: 'email', message: 'Invalid email' });
+
+  if (errors.length) {
+    res.status(422).json({ validationErrors: errors });
+  } else {
+    connection.query(
+      'INSERT INTO users (firstname, lastname, email) VALUES (?, ?, ?)',
+      [firstname, lastname, email],
+      (err, result) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send('Error saving the user');
+        } else {
+          res.status(201).send('User successfully saved');
+        }
+      }
+    );
+  }
 });
 
 app.put('/api/users/:id', (req, res) => {
