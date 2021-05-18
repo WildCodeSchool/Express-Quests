@@ -29,14 +29,16 @@ app.get('/api/movies', (req, res) => {
     sqlValues.push(req.query.max_duration);
   }
 
-  connection.query(sql, sqlValues, (err, results) => {
-    if (err) {
+  connection
+    .promise()
+    .query(sql, sqlValues)
+    .then(([results]) => {
+      res.json(results);
+    })
+    .catch((err) => {
       console.log(err);
       res.status(500).send('Error retrieving movies from database');
-    } else {
-      res.json(results);
-    }
-  });
+    });
 });
 
 app.get('/api/movies/:id', (req, res) => {
