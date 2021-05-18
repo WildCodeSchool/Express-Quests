@@ -1,6 +1,6 @@
 const movieController = require('./controllers/movies');
 
-module.exports = (app) => {
+const setUpRoutes = (app) => {
   // Movie routes
   app.get('/api/movies', movieController.handleGetMovies);
   app.get('/api/movies/:id', movieController.handleGetOneMovie);
@@ -10,4 +10,8 @@ module.exports = (app) => {
 
   // User routes
   // TODO
+};
+
+module.exports = {
+  setUpRoutes,
 };

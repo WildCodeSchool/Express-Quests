@@ -1,4 +1,5 @@
 const connection = require('./db-config');
+const { setupRoutes } = require('./routes');
 const express = require('express');
 const app = express();
 const Joi = require('joi');
@@ -15,8 +16,9 @@ connection.connect((err) => {
 
 app.use(express.json());
 
-require('./routes')(app);
+setupRoutes(app);
 
+// TODO break the following routes handlers into route definitions, model and controller
 app.get('/api/users', (req, res) => {
   let sql = 'SELECT * FROM users';
   const sqlValues = [];
