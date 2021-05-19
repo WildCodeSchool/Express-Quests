@@ -1,8 +1,20 @@
 const connection = require('../db-config');
 const Joi = require('joi');
+
 const db = connection.promise();
 
-const findManyMovies = ({ filters: { color, max_duration } }) => {
+const validate = (data, forCreation = true) => {
+  const presence = forCreation ? 'required' : 'optional';
+  return Joi.object({
+    title: Joi.string().max(255).presence(presence),
+    director: Joi.string().max(255).presence(presence),
+    year: Joi.number().integer().min(1888).presence(presence),
+    color: Joi.boolean().presence(presence),
+    duration: Joi.number().integer().min(1).presence(presence),
+  }).validate(data, { abortEarly: false }).error;
+};
+
+const findMany = ({ filters: { color, max_duration } }) => {
   let sql = 'SELECT * FROM movies';
   const sqlValues = [];
 
@@ -20,34 +32,13 @@ const findManyMovies = ({ filters: { color, max_duration } }) => {
   return db.query(sql, sqlValues).then(([results]) => results);
 };
 
-const findOneMovie = (id) => {
+const findOne = (id) => {
   return db
     .query('SELECT * FROM movies WHERE id = ?', [id])
     .then(([results]) => results[0]);
 };
 
-const validateMovie = ({ title, director, year, color, duration }) => {
-  return Joi.object({
-    title: Joi.string().max(255).required(),
-    director: Joi.string().max(255).required(),
-    year: Joi.number().integer().min(1888).required(),
-    color: Joi.boolean().required(),
-    duration: Joi.number().integer().min(1).required(),
-  }).validate({ title, director, year, color, duration }, { abortEarly: false })
-    .error;
-};
-
-const validateMovieForUpdate = (data) => {
-  return Joi.object({
-    title: Joi.string().max(255),
-    director: Joi.string().max(255),
-    year: Joi.number().integer().min(1888),
-    color: Joi.boolean(),
-    duration: Joi.number().integer().min(1),
-  }).validate(data, { abortEarly: false }).error;
-};
-
-const createMovie = ({ title, director, year, color, duration }) => {
+const create = ({ title, director, year, color, duration }) => {
   return db
     .query(
       'INSERT INTO movies (title, director, year, color, duration) VALUES (?, ?, ?, ?, ?)',
@@ -59,22 +50,21 @@ const createMovie = ({ title, director, year, color, duration }) => {
     });
 };
 
-const updateMovie = (id, newAttributes) => {
+const update = (id, newAttributes) => {
   return db.query('UPDATE movies SET ? WHERE id = ?', [newAttributes, id]);
 };
 
-const deleteMovie = (id) => {
+const destroy = (id) => {
   return db
     .query('DELETE FROM movies WHERE id = ?', [id])
     .then(([result]) => result.affectedRows !== 0);
 };
 
 module.exports = {
-  findManyMovies,
-  findOneMovie,
-  validateMovie,
-  validateMovieForUpdate,
-  createMovie,
-  updateMovie,
-  deleteMovie,
+  findMany,
+  findOne,
+  validate,
+  create,
+  update,
+  destroy,
 };

@@ -18,7 +18,7 @@ app.use(express.json());
 
 setupRoutes(app);
 
-// TODO break the following routes handlers into route definitions, model and controller
+// TODO break the following routes handlers into model and controller
 app.get('/api/users', (req, res) => {
   let sql = 'SELECT * FROM users';
   const sqlValues = [];

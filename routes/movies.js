@@ -1,16 +1,9 @@
-const {
-  findManyMovies,
-  findOneMovie,
-  validateMovie,
-  createMovie,
-  validateMovieForUpdate,
-  updateMovie,
-  deleteMovie,
-} = require('../models/movie');
+const moviesRouter = require('express').Router();
+const Movie = require('../models/movie');
 
-const handleGetMovies = (req, res) => {
+moviesRouter.get('/', (req, res) => {
   const { max_duration, color } = req.query;
-  findManyMovies({ filters: { max_duration, color } })
+  Movie.findMany({ filters: { max_duration, color } })
     .then((movies) => {
       res.json(movies);
     })
@@ -18,10 +11,10 @@ const handleGetMovies = (req, res) => {
       console.log(err);
       res.status(500).send('Error retrieving movies from database');
     });
-};
+});
 
-const handleGetOneMovie = (req, res) => {
-  findOneMovie(req.params.id)
+moviesRouter.get('/:id', (req, res) => {
+  Movie.findOne(req.params.id)
     .then((movie) => {
       if (movie) {
         res.json(movie);
@@ -32,14 +25,14 @@ const handleGetOneMovie = (req, res) => {
     .catch((err) => {
       res.status(500).send('Error retrieving movie from database');
     });
-};
+});
 
-const handlePostMovie = (req, res) => {
-  const error = validateMovie(req.body);
+moviesRouter.post('/', (req, res) => {
+  const error = Movie.validate(req.body);
   if (error) {
     res.status(422).json({ validationErrors: error.details });
   } else {
-    createMovie(req.body)
+    Movie.create(req.body)
       .then((createdMovie) => {
         res.status(201).json(createdMovie);
       })
@@ -48,18 +41,18 @@ const handlePostMovie = (req, res) => {
         res.status(500).send('Error saving the movie');
       });
   }
-};
+});
 
-const handlePutMovie = (req, res) => {
+moviesRouter.put('/:id', (req, res) => {
   let existingMovie = null;
   let validationErrors = null;
-  findOneMovie(req.params.id)
+  Movie.findOne(req.params.id)
     .then((movie) => {
       existingMovie = movie;
       if (!existingMovie) return Promise.reject('RECORD_NOT_FOUND');
-      validationErrors = validateMovieForUpdate(req.body);
+      validationErrors = Movie.validate(req.body, false);
       if (validationErrors) return Promise.reject('INVALID_DATA');
-      return updateMovie(req.params.id, req.body);
+      return Movie.update(req.params.id, req.body);
     })
     .then(() => {
       res.status(200).json({ ...existingMovie, ...req.body });
@@ -67,15 +60,15 @@ const handlePutMovie = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err === 'RECORD_NOT_FOUND')
-        res.status(404).send(`Movie with id ${movieId} not found.`);
+        res.status(404).send(`Movie with id ${req.params.id} not found.`);
       else if (err === 'INVALID_DATA')
         res.status(422).json({ validationErrors: validationErrors.details });
       else res.status(500).send('Error updating a movie.');
     });
-};
+});
 
-const handleDeleteMovie = (req, res) => {
-  deleteMovie(req.params.id)
+moviesRouter.delete('/:id', (req, res) => {
+  Movie.destroy(req.params.id)
     .then((deleted) => {
       if (deleted) res.status(200).send('🎉 Movie deleted!');
       else res.status(404).send('Movie not found');
@@ -84,12 +77,6 @@ const handleDeleteMovie = (req, res) => {
       console.log(err);
       res.status(500).send('Error deleting a movie');
     });
-};
+});
 
-module.exports = {
-  handleDeleteMovie,
-  handleGetMovies,
-  handleGetOneMovie,
-  handlePostMovie,
-  handlePutMovie,
-};
+module.exports = moviesRouter;
