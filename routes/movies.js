@@ -13,6 +13,17 @@ moviesRouter.get('/', (req, res) => {
     });
 });
 
+moviesRouter.get('/', async (req, res) => {
+  const { max_duration, color } = req.query;
+  Movie.findMany({ filters: { max_duration, color } })
+    .then((movies) => {
+      res.json(movies);
+    })
+    .catch((err) => {
+      res.status(500).send('Error retrieving movies from database');
+    });
+});
+
 moviesRouter.get('/:id', (req, res) => {
   Movie.findOne(req.params.id)
     .then((movie) => {
