@@ -55,6 +55,7 @@ CREATE TABLE `users` (
     `email` varchar(255) UNIQUE NOT NULL,
     `city` varchar(255) DEFAULT NULL,
     `language` varchar(255) DEFAULT NULL,
+    `hashedPassword` varchar(255) NOT NULL,
     PRIMARY KEY (`id`)
   ) ENGINE = InnoDB AUTO_INCREMENT = 7 DEFAULT CHARSET = utf8;
 INSERT INTO
@@ -66,40 +67,46 @@ VALUES
     'Doe',
     'john.doe@example.com',
     'Paris',
-    'English'
+    'English',
+    "$argon2id$v=19$m=16,t=2,p=1$emVmZXpmemZlemVmZWR6ZXplZg$rqZkhxu5YbqCGHPNrjJZpQ"
   ),(
     2,
     'Valeriy',
     'Appius',
     'valeriy.ppius@example.com',
     'Moscow',
-    'Russian'
+    'Russian',
+    '$argon2id$v=19$m=16,t=2,p=1$emVmemVmemZlemZ6ZnpmZQ$eSetR6KPUNAGW+q+wDadcw'
   ),(
     3,
     'Ralf',
     'Geronimo',
     'ralf.geronimo@example.com',
     'New York',
-    'Italian'
+    'Italian',
+    '$argon2id$v=19$m=16,t=2,p=1$emVmemVmemZlemZ6ZnpmZXphZGF6ZGQ$a0bg5DZB6H6v3jjQC81DXg'
   ),(
     4,
     'Maria',
     'Iskandar',
     'maria.iskandar@example.com',
     'New York',
-    'German'
+    'German',
+    '$argon2id$v=19$m=16,t=2,p=1$emVmemVmemZlenplZHpkZnpmemZlemFkYXpkZA$V1qAnJDyMuuWG7g9yoGYXA'
   ),(
     5,
     'Jane',
     'Doe',
     'jane.doe@example.com',
     'London',
-    'English'
+    'English',
+    '$argon2id$v=19$m=16,t=2,p=1$emVmemVmemZlenplZHpkZGZ6ZnpmZXphZGF6ZGQ$VCzq45PL9t8khtc44Kk5iw'
   ),(
     6,
     'Johanna',
     'Martino',
     'johanna.martino@example.com',
     'Milan',
-    'Spanish'
+    'Spanish',
+    '$argon2id$v=19$m=16,t=2,p=1$emVmemVmemVmemZlenplZHpkZGZ6ZnpmZXphZGF6ZGQ$UKaGZ9hGFn/S5SBQDMe/Uw'
   );
