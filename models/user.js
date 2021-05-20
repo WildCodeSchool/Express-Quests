@@ -8,6 +8,7 @@ const validate = (data, forCreation = true) => {
   const presence = forCreation ? 'required' : 'optional';
   return Joi.object({
     email: Joi.string().email().max(255).presence(presence),
+    password: Joi.string().min(8).max(50).presence(presence),
     firstname: Joi.string().max(255).presence(presence),
     lastname: Joi.string().max(255).presence(presence),
     city: Joi.string().allow(null, '').max(255),
@@ -16,7 +17,7 @@ const validate = (data, forCreation = true) => {
 };
 
 const findMany = ({ filters: { language } }) => {
-  let sql = 'SELECT * FROM users';
+  let sql = 'SELECT id, email, firstname, lastname, city, language FROM users';
   const sqlValues = [];
   if (language) {
     sql += ' WHERE language = ?';
@@ -28,7 +29,10 @@ const findMany = ({ filters: { language } }) => {
 
 const findOne = (id) => {
   return db
-    .query('SELECT * FROM users WHERE id = ?', [id])
+    .query(
+      'SELECT id, email, firstname, lastname, city, language FROM users WHERE id = ?',
+      [id]
+    )
     .then(([results]) => results[0]);
 };
 
@@ -44,10 +48,21 @@ const findByEmailWithDifferentId = (email, id) => {
     .then(([results]) => results[0]);
 };
 
-const create = (data) => {
-  return db.query('INSERT INTO users SET ?', data).then(([result]) => {
-    const id = result.insertId;
-    return { ...data, id };
+const create = ({ firstname, lastname, city, language, email, password }) => {
+  return hashPassword(password).then((hashedPassword) => {
+    return db
+      .query('INSERT INTO users SET ?', {
+        firstname,
+        lastname,
+        city,
+        language,
+        email,
+        hashedPassword,
+      })
+      .then(([result]) => {
+        const id = result.insertId;
+        return { firstname, lastname, city, language, email, id };
+      });
   });
 };
 
