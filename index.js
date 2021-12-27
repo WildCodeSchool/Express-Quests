@@ -23,8 +23,6 @@ const welcomeName = (request, response) => {
 
 app.get("/users/:name", welcomeName);
 
-const fruits = ["Apple", "Banana", "Kiwi"];
-
 const cocktails = [
   {
     id: 0,
