@@ -8,20 +8,16 @@ const app = express();
 const port = 3000;
 
 // We create a get route for '/'
-const welcome = (request, response) => {
+app.get("/", (req, res) => {
   // We send "Welcome to Express as a response"
-  response.send("Welcome to Express");
-};
-
-app.get("/", welcome);
+  res.send("Welcome to Express");
+});
 
 // We create a route '/user/:name'
-const welcomeName = (request, response) => {
+app.get("/users/:name", (req, res) => {
   // We send "Welcome and the name passed in url after users/"
-  response.send(`Welcome, ${request.params.name}`);
-};
-
-app.get("/users/:name", welcomeName);
+  res.send(`Welcome, ${req.params.name}`);
+});
 
 const cocktails = [
   {
@@ -39,14 +35,16 @@ const cocktails = [
 ];
 
 // We create a route for '/cocktails'
-const browseCocktails = (request, response) => {
+app.get("/cocktails", (req, res) => {
   // we send back a 200 status and the cocktail in a JSON format
-  response.status(200).json(cocktails);
-};
-
-app.get("/cocktails", browseCocktails);
+  res.status(200).json(cocktails);
+});
 
 // We listen to incoming request on port
-app.listen(port, () => {
-  console.log(`Server is runing on ${port}`);
+app.listen(port, (err) => {
+  if (err) {
+    console.error('Something bad happened');
+  } else {
+    console.log(`server is listening on ${port}`);
+  }
 });
