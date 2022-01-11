@@ -15,6 +15,7 @@ connection.connect((err) => {
 app.get("/api/movies", (req, res) => {
   connection.query("SELECT * FROM movies", (err, result) => {
     if (err) {
+      console.error(err);
       res.status(500).send("Error retrieving data from database");
     } else {
       res.json(result);
