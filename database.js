@@ -9,22 +9,22 @@ const database = mysql.createPool({
   database: process.env.DB_NAME,
 });
 
-// database
-//   .getConnection()
-//   .then(() => {
-//     console.log("Connection ok !");
-//   })
-//   .catch((err) => {
-//     console.log("An error occured");
-//   })
-
 database
-  .query("select * from movies")
-  .then(([movies]) => {
-    console.log(movies);
+  .getConnection()
+  .then(() => {
+    console.log("Connection ok !");
   })
   .catch((err) => {
-    console.error(err);
-  });
+    console.log("An error occured");
+  })
+
+// database
+//   .query("select * from movies")
+//   .then(([movies]) => {
+//     console.log(movies);
+//   })
+//   .catch((err) => {
+//     console.error(err);
+//   });
 
 module.exports = database;
