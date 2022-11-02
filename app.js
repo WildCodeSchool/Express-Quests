@@ -1,8 +1,9 @@
+require("dotenv").config();
 const express = require("express");
 
 const app = express();
 
-const port = 5000;
+const port = process.env.APP_PORT ?? 666;
 
 const welcome = (req, res) => {
   res.send("Welcome to my favourite movie list");
@@ -19,6 +20,6 @@ app.listen(port, (err) => {
   if (err) {
     console.error("Something bad happened");
   } else {
-    console.log(`Server is listening on ${port}`);
+    console.log(`Server is listening on http://localhost:${port}`);
   }
 });
