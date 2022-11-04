@@ -16,7 +16,7 @@ database
   })
   .catch((err) => {
     console.log("An error occured");
-  })
+  });
 
 // database
 //   .query("select * from movies")
