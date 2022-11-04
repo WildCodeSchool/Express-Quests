@@ -13,7 +13,7 @@ const users = [
     lastname: "Appius",
     email: "valeriy.appius@example.com",
     city: "Moscow",
-    language: "Russ,ian",
+    language: "Russian",
   },
 
   {
