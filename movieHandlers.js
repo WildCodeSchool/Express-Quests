@@ -85,7 +85,7 @@ const deleteMovie = (req, res) => {
 
     .then(([result]) => {
       if (result.affectedRows === 0) {
-        res.status(404).send("Not Found");
+        res.status(404).send("Movie not Found");
       } else {
         res.sendStatus(204);
       }

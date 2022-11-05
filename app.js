@@ -28,7 +28,7 @@ app.get("/api/movies", movieHandlers.getMovies);
 app.get("/api/movies/:id", movieHandlers.getMovieById);
 app.post("/api/movies", movieHandlers.postMovie);
 app.put("/api/movies/:id", movieHandlers.updateMovie);
-app.delete("/api/movies/:id",movieHandlers.deleteMovie);
+app.delete("/api/movies/:id", movieHandlers.deleteMovie);
 
 // import modules users Handlers
 const userHandlers = require("./userHandlers");
@@ -37,7 +37,8 @@ const userHandlers = require("./userHandlers");
 app.get("/api/users", userHandlers.getUsers);
 app.get("/api/users/:id", userHandlers.getUsersById);
 app.post("/api/users", userHandlers.postUser);
-app.put("/api/users/:id", userHandlers.updateUser)
+app.put("/api/users/:id", userHandlers.updateUser);
+app.delete("/api/users/:id", userHandlers.deleteUser);
 
 
 
