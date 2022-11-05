@@ -5,7 +5,7 @@ const express = require("express");
 //declaration serveur et port
 const app = express();
 const port = process.env.APP_PORT ?? 666;
-app.use(express.json()); // Middleware pour JSON  
+app.use(express.json());
 
 app.listen(port, (err) => {
   if (err) {
@@ -27,7 +27,7 @@ const movieHandlers = require("./movieHandlers");
 app.get("/api/movies", movieHandlers.getMovies);
 app.get("/api/movies/:id", movieHandlers.getMovieById);
 app.post("/api/movies", movieHandlers.postMovie);
-app.put("/api/movies/:id",movieHandlers.updateMovie);
+app.put("/api/movies/:id", movieHandlers.updateMovie);
 
 // import modules users Handlers
 const userHandlers = require("./userHandlers");
@@ -36,6 +36,7 @@ const userHandlers = require("./userHandlers");
 app.get("/api/users", userHandlers.getUsers);
 app.get("/api/users/:id", userHandlers.getUsersById);
 app.post("/api/users", userHandlers.postUser);
+app.put("/api/users/:id", userHandlers.updateUser)
 
 
 
