@@ -3,6 +3,7 @@ const database = require("./database")
 
 // declaration des Handlers
 const getMovies = (req, res) => {
+  console.log(req.params)
   database
     .query("select * from movies")
 
@@ -17,6 +18,7 @@ const getMovies = (req, res) => {
 };
 
 const getMovieById = (req, res) => {
+  console.log(req.params)
   const id = parseInt(req.params.id);
 
   database
