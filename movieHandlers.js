@@ -3,9 +3,54 @@ const database = require("./database")
 
 // declaration des Handlers
 const getMovies = (req, res) => {
-  console.log(req.params)
+  console.log(req.query);
+  // let sql = "select * from movies" // première étape decla de variables pour query color
+  // const sqlValues = [];
+  // if (req.query.color != null) {    // prise en compte de la query color
+  //   sql += " where color = ?";
+  //   sqlValues.push(req.query.color);
+
+  //   if (req.query.max_duration != null) {    // prise en compte de la query max_duration en plus
+  //     sql += " and where max_duration <= ?";
+  //     sqlValues.push(req.query.max_duration)
+  //   }
+  // }
+
+  // else if (req.query.max_duration != null) {    // prise en compte de la query max_duration seulement
+  //   sql += " where max_duration <= ?";
+  //   sqlValues.push(req.query.max_duration)
+  // }
+
+  const initialSql = "select * from movies"
+  const where = []
+
+
+  if (req.query.color != null) {
+    where.push({
+      column: "color",
+      value: req.query.color,
+      operator: "=",
+    });
+  }
+  if (req.query.max_duration != null) {
+    where.push({
+      column: "duration",
+      value: req.query.max_duration,
+      operator: "<=",
+    });
+  }
+  // database
+  //   .query(sql, sqlValues)  // MAJ de la query pour prendre en compte si color
   database
-    .query("select * from movies")
+    .query(
+
+      where.reduce(   //méthode extraite de la quete
+        (sql, { column, operator }, index) =>
+          `${sql} ${index === 0 ? "where" : "and"} ${column} ${operator} ?`,
+        initialSql
+      ),
+      where.map(({ value }) => value)
+    )
 
     .then(([movies]) => {
       res.status(200).json(movies);
