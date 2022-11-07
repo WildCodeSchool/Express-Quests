@@ -3,7 +3,7 @@ const database = require("./database");
 // GET MOVIE
 
 const getMovies = (req, res) => {
-  let sql = "select * from movies";
+let sql = "select * from movies";
 const sqlValues = [];
 
 if (req.query.color != null) {
@@ -18,8 +18,6 @@ if (req.query.color != null) {
   sql += " where duration <= ?";
   sqlValues.push(req.query.max_duration);
 }
-
-
   database
   .query(sql, sqlValues)
   .then (([movies]) => {
@@ -30,7 +28,6 @@ if (req.query.color != null) {
     res.status(500).send("Error retrieving data from database");
   })
 };
-
 const getMovieById = (req, res) => {
   const id = parseInt(req.params.id);
   database
@@ -110,11 +107,7 @@ const deleteMovie =(req,res) => {
     console.error(err);
     res.status(500).send("Error deleting the movie")
   });
-  }
-
-
-
-
+  };
 
 module.exports = {
   getMovies,
