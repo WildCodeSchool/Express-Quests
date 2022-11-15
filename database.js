@@ -19,7 +19,7 @@ database
 database
   .query("select * from movies")
   .then((result) => {
-    console.log(result);
+    // console.log(result);
   })
   .catch((err) => {
     console.error(err);
@@ -30,8 +30,9 @@ module.exports = database;
   .query("select * from movies")
   .then((result) => {
     const movies = result[0];
-    console.log(movies);
   })
   .catch((err) => {
     console.error(err);
   });
+
+ 
