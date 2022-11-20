@@ -1,41 +1,5 @@
 const database = require("./database");
 
-const postMovies = (req,res) => {
-  const { title, director, year, color, duration } = req.body;
-
-  database
-    .query(
-      "INSERT INTO movies(title, director, year, color, duration) VALUES (?, ?, ?, ?, ?)",
-      [title, director, year, color, duration]
-    )
-    .then(([movie]) => {
-      res.location(`/api/movies/${movie.insertId}`).sendStatus(201);
-      // wait for it
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send("Error saving the movie");
-    });
-};
-
-const putMovies = (req,res) => {
-  const id = parseInt(req.params.id);
-  const { title, director, year, color, duration } = req.body;
-
-  database
-  .query("update movies set title = ?, director = ?, year = ?, color = ?, duration = ? where id = ?",
-  [title, director, year, color, duration, id])
-  .then(([movieUpdate]) => {{if (movieUpdate.affectedRows === 0) {
-    res.status(404).send("Not Found");
-  } else {
-    res.sendStatus(204);
-  }}})
-  .catch((err) => {
-    console.error(err);
-    res.status(500).send("Error editing movie");
-  })
-}
-
 const getMovies = (req, res) => {
   database
   .query("select * from movies")
@@ -64,7 +28,62 @@ const getMovieById = (req, res) => {
   res.status(500).send("Error retrieving data from database");});  
 };
 
+//I want to add a movie
+const postMovies = (req,res) => {
+  const { title, director, year, color, duration } = req.body;
+
+  database
+    .query(
+      "INSERT INTO movies(title, director, year, color, duration) VALUES (?, ?, ?, ?, ?)",
+      [title, director, year, color, duration]
+    )
+    .then(([movie]) => {
+      res.location(`/api/movies/${movie.insertId}`).sendStatus(201);
+      // wait for it
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error saving the movie");
+    });
+};
+
+//I want to update a movie
+const putMovies = (req,res) => {
+  const id = parseInt(req.params.id);
+  const { title, director, year, color, duration } = req.body;
+
+  database
+  .query("update movies set title = ?, director = ?, year = ?, color = ?, duration = ? where id = ?",
+  [title, director, year, color, duration, id])
+  .then(([movieUpdate]) => {{if (movieUpdate.affectedRows === 0) {
+    res.status(404).send("Not Found");
+  } else {
+    res.sendStatus(204);
+  }}})
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send("Error editing movie");
+  })
+}
+
+//I want to delete a movie
+const deleteMovies = (req, res) => {
+  const id = parseInt(req.params.id);
+
+  database
+  .query("delete from movies where id = ?", [id])
+  .then(([movieToDelete]) =>
+  {if (movieToDelete.affectedRows === 0) {
+    res.status(404).send("Not Found");
+  } else {
+    res.sensStatus(204);
+  }})
+  .catch((err)=>
+  {console.error(err);
+  res.status(500).send("Error deleting data from database");});  
+};
+
 module.exports = {
   getMovies,
-  getMovieById,postMovies, putMovies
+  getMovieById,postMovies, putMovies, deleteMovies
 };
