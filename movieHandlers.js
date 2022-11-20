@@ -8,8 +8,8 @@ const postMovies = (req,res) => {
       "INSERT INTO movies(title, director, year, color, duration) VALUES (?, ?, ?, ?, ?)",
       [title, director, year, color, duration]
     )
-    .then(([result]) => {
-      res.location(`/api/movies/${result.insertId}`).sendStatus(201);
+    .then(([movie]) => {
+      res.location(`/api/movies/${movie.insertId}`).sendStatus(201);
       // wait for it
     })
     .catch((err) => {
@@ -17,6 +17,24 @@ const postMovies = (req,res) => {
       res.status(500).send("Error saving the movie");
     });
 };
+
+const putMovies = (req,res) => {
+  const id = parseInt(req.params.id);
+  const { title, director, year, color, duration } = req.body;
+
+  database
+  .query("update movies set title = ?, director = ?, year = ?, color = ?, duration = ? where id = ?",
+  [title, director, year, color, duration, id])
+  .then(([movieUpdate]) => {{if (movieUpdate.affectedRows === 0) {
+    res.status(404).send("Not Found");
+  } else {
+    res.sendStatus(204);
+  }}})
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send("Error editing movie");
+  })
+}
 
 const getMovies = (req, res) => {
   database
@@ -48,5 +66,5 @@ const getMovieById = (req, res) => {
 
 module.exports = {
   getMovies,
-  getMovieById,postMovies
+  getMovieById,postMovies, putMovies
 };
