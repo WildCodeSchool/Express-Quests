@@ -1,31 +1,4 @@
 const database = require("./database");
-const movies = [
-  {
-    id: 1,
-    title: "Citizen Kane",
-    director: "Orson Wells",
-    year: "1941",
-    colors: false,
-    duration: 120,
-  },
-  {
-    id: 2,
-    title: "The Godfather",
-    director: "Francis Ford Coppola",
-    year: "1972",
-    colors: true,
-    duration: 180,
-  },
-  {
-    id: 3,
-    title: "Pulp Fiction",
-    director: "Quentin Tarantino",
-    year: "1994",
-    color: true,
-    duration: 180,
-  },
-];
-
 const getMovies = (req, res) => {
   database
   .query("select * from movies")
@@ -44,18 +17,14 @@ const getMovieById = (req, res) => {
   database
   .query("select * from movies where id = ?", [id])
   .then(([movies]) =>
-  {if (movie[0] != null) {
-    res.json(movie[0]);
+  {if (movies[0] != null) {
+    res.json(movies[0]);
   } else {
     res.status(404).send("Not Found");
   }})
   .catch((err)=>
   {console.error(err);
-  res.status(500).send("Error retrieving data from database");});
-
-  const movie = movies.find((movie) => movie.id === id);
-
-  
+  res.status(500).send("Error retrieving data from database");});  
 };
 
 module.exports = {
