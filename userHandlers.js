@@ -1,38 +1,5 @@
 const database = require("./database");
 
-const postUsers =(req,res) => {
-  const {firstname, lastname, email, city, language}= req.body
-
-  database
-  .query("INSERT INTO users(firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)", 
-  [firstname, lastname, email, city, language])
-  .then(([result]) => {
-    res.location(`/api/users/${result.insertId}`).sendStatus(201);
-  })
-  .catch((err) => {
-    console.error(err);
-    res.status(500).send("Error saving the movie");
-  });
-};
-
-const putUsers = (req,res) => {
-  const id = parseInt(req.params.id);
-  const { firstname, lastname, email, city, language } = req.body;
-
-  database
-  .query("update users set firstname = ?, lastname = ?, email = ?, city = ?, language = ? where id = ?",
-  [firstname, lastname, email, city, language, id])
-  .then(([userUpdate]) => {{if (userUpdate.affectedRows === 0) {
-    res.status(404).send("Not Found");
-  } else {
-    res.sendStatus(204);
-  }}})
-  .catch((err) => {
-    console.error(err);
-    res.status(500).send("Error editing user");
-  })
-};
-
 const getUsers = (req, res) => {
   database
   .query("select * from users")
@@ -61,7 +28,63 @@ const getUserById = (req, res) => {
   res.status(500).send("Error retrieving data from database");});
 };
 
+
+//add user
+const postUsers =(req,res) => {
+  const {firstname, lastname, email, city, language}= req.body
+
+  database
+  .query("INSERT INTO users(firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)", 
+  [firstname, lastname, email, city, language])
+  .then(([user]) => {
+    res.location(`/api/users/${user.insertId}`).sendStatus(201);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send("Error saving the user");
+  });
+};
+
+//update user
+const putUsers = (req,res) => {
+  const id = parseInt(req.params.id);
+  const { firstname, lastname, email, city, language } = req.body;
+
+  database
+  .query("update users set firstname = ?, lastname = ?, email = ?, city = ?, language = ? where id = ?",
+  [firstname, lastname, email, city, language, id])
+  .then(([userUpdate]) => {{if (userUpdate.affectedRows === 0) {
+    res.status(404).send("Not Found");
+  } else {
+    res.sendStatus(204);
+  }}})
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send("Error editing user");
+  })
+};
+
+//delete user
+const deleteUsers = (req, res) => {
+  const id = parseInt(req.params.id);
+
+  database
+  .query("delete from users where id = ?", [id])
+  .then(([userToDelete]) =>
+  {if (userToDelete.affectedRows === 0) {
+    res.status(404).send("Not Found");
+  } else {
+    res.sensStatus(204);
+  }})
+  .catch((err)=>
+  {console.error(err);
+  res.status(500).send("Error deleting data from database");});  
+};
+
 module.exports = {
   getUsers,
-  getUserById,postUsers, putUsers,
+  getUserById,
+  postUsers, 
+  putUsers, 
+  deleteUsers,
 };
