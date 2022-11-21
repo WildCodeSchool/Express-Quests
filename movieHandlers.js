@@ -1,3 +1,9 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable semi */
+/* eslint-disable keyword-spacing */
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable radix */
+/* eslint-disable no-lone-blocks */
 /* eslint-disable no-shadow */
 const movies = [
   {
@@ -91,7 +97,7 @@ const getUserById = (req, res) => {
 
 const postMovie = (req, res) => {
   const {
-    title, director, year, color, duration,
+    title, director, year, color, duration, 
   } = req.body;
 
   database
@@ -110,7 +116,7 @@ const postMovie = (req, res) => {
 
 const postUsers = (req, res) => {
   const {
-    firstname, lastname, email, city, language,
+    firstname, lastname, email, city, language, 
   } = req.body;
 
   database
@@ -127,6 +133,57 @@ const postUsers = (req, res) => {
     });
 };
 
+const putMovies = (req, res) => {
+  // eslint-disable-next-line radix
+  const id = parseInt(req.params.id);
+  const {
+    title, director, year, color, duration, 
+  } = req.body;
+
+  database
+    .query(
+      'update movies set title = ?, director = ?, year = ?, color = ?, duration = ? where id = ?',
+      [title, director, year, color, duration, id],
+    )
+    .then(([movieUpdate]) => {
+      {
+        if (movieUpdate.affectedRows === 0) {
+          res.status(404).send('Not Found');
+        } else {
+          res.sendStatus(204);
+        }
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error editing movie');
+    });
+};
+
+const putUsers = (req, res) => {
+  const id = parseInt(req.params.id);
+  const {
+    firstname, lastname, email, city, language, 
+  } = req.body;
+
+  database
+    .query(
+      'update users set firstname = ?, lastname = ?, email = ?, city = ?, language = ? where id = ?',
+      [firstname, lastname, email, city, language, id],
+    )
+    .then(([userUpdate]) => {
+      { if (userUpdate.affectedRows === 0) {
+        res.status(404).send('Not Found'); 
+      }else {
+        res.sendStatus(204);
+      } }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error editing user');
+    })
+};
+
 module.exports = {
   getMovies,
   getMovieById,
@@ -134,6 +191,8 @@ module.exports = {
   getUserById,
   postMovie,
   postUsers,
+  putMovies,
+  putUsers,
 };
 
 // CORRECTION :
