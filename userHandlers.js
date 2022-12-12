@@ -79,7 +79,7 @@ const updateUser = (req, res) => {
 
   database
     .query(
-      "update movies set firstname = ?, lastname = ?, email = ?, city = ?, language = ? where id = ?",
+      "update users set firstname = ?, lastname = ?, email = ?, city = ?, language = ? where id = ?",
       [firstname, lastname, email, city, language, id]
     )
     .then(([result]) => {
