@@ -23,7 +23,6 @@ const getUsers = (req, res) => {
 
   database
     .query(
-
       where.reduce(
         (sql, { column, operator }, index) =>
           `${sql} ${index === 0 ? "where" : "and"} ${column} ${operator} ?`,
