@@ -74,10 +74,11 @@ const {
   deleteUser,
 } = require("./userHandlers");
 const { validateUser } = require("./validateUser");
+const { hashPassword,myFunction } = require("./auth");
 
 // Route et methode de l'API pour users
 app.get("/api/users", getUsers);
 app.get("/api/users/:id", getUsersById);
-app.post("/api/users", validateUser, postUser);
+app.post("/api/users", validateUser, myFunction, postUser);
 app.put("/api/users/:id", validateUser, updateUser);
 app.delete("/api/users/:id", deleteUser);

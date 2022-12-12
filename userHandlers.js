@@ -1,9 +1,10 @@
-const database = require("./database")
+const database = require("./database");
 
 const getUsers = (req, res) => {
   console.log(req.query);
-  const initialSql = "select * from users"
-  const where = []
+  const initialSql =
+    "select firstname, lastname, email, city, language from users"; //enlever select * pour protéger données sensibles comme colonne hashedPassword
+  const where = [];
 
   if (req.query.language != null) {
     where.push({
@@ -37,7 +38,7 @@ const getUsers = (req, res) => {
 
     .catch((err) => {
       console.error(err);
-      res.status(500).send("Error retrieving data from database")
+      res.status(500).send("Error retrieving data from database");
     });
 };
 
@@ -49,9 +50,8 @@ const getUsersById = (req, res) => {
 
     .then(([users]) => {
       if (users[0] != null) {
-        res.status(200).json(users[0])
-      } else
-        res.status(404).send("Not found");
+        res.status(200).json(users[0]);
+      } else res.status(404).send("Not found");
     })
 
     .catch((err) => {
@@ -61,12 +61,13 @@ const getUsersById = (req, res) => {
 };
 
 const postUser = (req, res) => {
-  const { firstname, lastname, email, city, language } = req.body;
+  const { firstname, lastname, email, city, language, hashedPassword } =
+    req.body;
 
   database
     .query(
-      "INSERT INTO users(firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)",
-      [firstname, lastname, email, city, language]
+      "INSERT INTO users(firstname, lastname, email, city, language, hashedPassword) VALUES (?, ?, ?, ?, ?,?)",
+      [firstname, lastname, email, city, language, hashedPassword]
     )
 
     .then(([result]) => {
@@ -80,13 +81,15 @@ const postUser = (req, res) => {
 };
 
 const updateUser = (req, res) => {
-  const id = parseInt(req.params.id)
+  const id = parseInt(req.params.id);
   const { firstname, lastname, email, city, language } = req.body;
   console.log(req.body);
 
   database
-    .query("update users set firstname = ?, lastname = ?, email = ?, city = ?, language = ? where id = ?",
-      [firstname, lastname, email, city, language, id])
+    .query(
+      "update users set firstname = ?, lastname = ?, email = ?, city = ?, language = ? where id = ?",
+      [firstname, lastname, email, city, language, id]
+    )
 
     .then(([result]) => {
       if (result.affectedRows === 0) {
@@ -98,8 +101,8 @@ const updateUser = (req, res) => {
 
     .catch((err) => {
       console.error(err);
-      res.status(500).send("Error editing the user")
-    })
+      res.status(500).send("Error editing the user");
+    });
 };
 
 const deleteUser = (req, res) => {
@@ -122,11 +125,10 @@ const deleteUser = (req, res) => {
     });
 };
 
-
 module.exports = {
   getUsers,
   getUsersById,
   postUser,
   updateUser,
-  deleteUser
+  deleteUser,
 };

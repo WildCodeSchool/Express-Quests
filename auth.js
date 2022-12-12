@@ -1,4 +1,3 @@
-
 const argon2 = require("argon2");
 
 const hashingOptions = {
@@ -25,6 +24,21 @@ const hashPassword = (req, res, next) => {
     });
 };
 
+//meme exemple que precedent en asynchrone
+const myFunction = async (req, res, next) => {
+  try {
+    const hashedPassword = await argon2.hash(req.body.password, hashingOptions);
+    console.log(hashedPassword);
+
+    req.body.hashedPassword = hashedPassword;
+    delete req.body.password;
+    next();
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
+};
 module.exports = {
   hashPassword,
+  myFunction,
 };
