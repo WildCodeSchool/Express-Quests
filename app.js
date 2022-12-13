@@ -50,9 +50,6 @@ app.get(
   }
 );
 
-// exemple verif mail et password
-const { getUserByEmailWithPasswordAndPassToNext } = require("./userHandlers");
-const { asyncHash, verifyPassword } = require("./auth");
 
 // const postLogin = (req, res) => {
 //   if (
@@ -64,24 +61,17 @@ const { asyncHash, verifyPassword } = require("./auth");
 //     res.sendStatus(401);
 //   }
 // };
-app.post("/api/login", getUserByEmailWithPasswordAndPassToNext, verifyPassword); // route post pour exercice quete 8
 
-// import modules movies Handlers pour méthodes et middleware
+// exemple verif mail et password
+const { getUserByEmailWithPasswordAndPassToNext } = require("./userHandlers");
+const { asyncHash, verifyPassword,verifyToken } = require("./auth");
+
+
+// import modules movies Handlers 
 const movieHandlers = require("./movieHandlers");
 const validateMovie = require("./validateMovie");
 
-// Route et methode de l'API pour movies
-app.get("/api/movies", movieHandlers.getMovies);
-app.get("/api/movies/:id", movieHandlers.getMovieById);
-app.post("/api/movies", validateMovie.validateMovie, movieHandlers.postMovie);
-app.put(
-  "/api/movies/:id",
-  validateMovie.validateMovie,
-  movieHandlers.updateMovie
-);
-app.delete("/api/movies/:id", movieHandlers.deleteMovie);
-
-// import modules users Handlers
+// import modules users Handlers (destructuration)
 const {
   getUsers,
   getUsersById,
@@ -91,9 +81,30 @@ const {
 } = require("./userHandlers");
 const { validateUser } = require("./validateUser");
 
-// Route et methode de l'API pour users
+// Routes publiques
 app.get("/api/users", getUsers);
 app.get("/api/users/:id", getUsersById);
-app.post("/api/users", validateUser, asyncHash, postUser);
+app.get("/api/movies", movieHandlers.getMovies);
+app.get("/api/movies/:id", movieHandlers.getMovieById);
+app.post("/api/users", validateUser, asyncHash, postUser); // route register
+app.post("/api/login", getUserByEmailWithPasswordAndPassToNext, verifyPassword); // route login pour exercice quete 8
+
+
+//routes protégées par Token 
+app.use(verifyToken);
+
+
+app.get("/api/testPayload", (req, res) => {
+  console.log(req.payload)
+  res.json(req.payload)
+})
 app.put("/api/users/:id", validateUser, updateUser);
 app.delete("/api/users/:id", deleteUser);
+app.post("/api/movies", validateMovie.validateMovie, verifyToken, movieHandlers.postMovie);
+app.put(
+  "/api/movies/:id",
+  validateMovie.validateMovie,
+  movieHandlers.updateMovie
+);
+app.delete("/api/movies/:id", movieHandlers.deleteMovie);
+
