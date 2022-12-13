@@ -15,7 +15,7 @@ app.listen(port, (err) => {
   }
 });
 
-//page test muddleware
+//page test middleware
 const step1 = (req, res, next) => {
   req.message = "I went through step1";
   next();
@@ -50,6 +50,22 @@ app.get(
   }
 );
 
+// exemple verif mail et password
+const { getUserByEmailWithPasswordAndPassToNext } = require("./userHandlers");
+const { asyncHash, verifyPassword } = require("./auth");
+
+// const postLogin = (req, res) => {
+//   if (
+//     req.body.email === "dwight@theoffice.com" &&
+//     req.body.password === "123456"
+//   ) {
+//     res.send("Credentials are valid");
+//   } else {
+//     res.sendStatus(401);
+//   }
+// };
+app.post("/api/login", getUserByEmailWithPasswordAndPassToNext, verifyPassword); // route post pour exercice quete 8
+
 // import modules movies Handlers pour méthodes et middleware
 const movieHandlers = require("./movieHandlers");
 const validateMovie = require("./validateMovie");
@@ -74,11 +90,10 @@ const {
   deleteUser,
 } = require("./userHandlers");
 const { validateUser } = require("./validateUser");
-const { hashPassword,myFunction } = require("./auth");
 
 // Route et methode de l'API pour users
 app.get("/api/users", getUsers);
 app.get("/api/users/:id", getUsersById);
-app.post("/api/users", validateUser, myFunction, postUser);
+app.post("/api/users", validateUser, asyncHash, postUser);
 app.put("/api/users/:id", validateUser, updateUser);
 app.delete("/api/users/:id", deleteUser);

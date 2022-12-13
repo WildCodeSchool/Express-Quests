@@ -1,5 +1,5 @@
 //import database
-const database = require("./database")
+const database = require("./database");
 
 // declaration des Handlers
 const getMovies = (req, res) => {
@@ -21,9 +21,8 @@ const getMovies = (req, res) => {
   //   sqlValues.push(req.query.max_duration)
   // }
 
-  const initialSql = "select * from movies"
-  const where = []
-
+  const initialSql = "select * from movies";
+  const where = [];
 
   if (req.query.color != null) {
     where.push({
@@ -43,8 +42,8 @@ const getMovies = (req, res) => {
   //   .query(sql, sqlValues)  // MAJ de la query pour prendre en compte si color
   database
     .query(
-
-      where.reduce(   //méthode extraite de la quete
+      where.reduce(
+        //méthode extraite de la quete
         (sql, { column, operator }, index) =>
           `${sql} ${index === 0 ? "where" : "and"} ${column} ${operator} ?`,
         initialSql
@@ -58,12 +57,12 @@ const getMovies = (req, res) => {
 
     .catch((err) => {
       console.error(err);
-      res.status(500).send("Error retrieving data from database")
+      res.status(500).send("Error retrieving data from database");
     });
 };
 
 const getMovieById = (req, res) => {
-  console.log(req.params)
+  console.log(req.params);
   const id = parseInt(req.params.id);
 
   database
@@ -71,9 +70,8 @@ const getMovieById = (req, res) => {
 
     .then(([movies]) => {
       if (movies[0] != null) {
-        res.json(movies[0])
-      } else
-        res.status(404).send("This movie does not exist");
+        res.json(movies[0]);
+      } else res.status(404).send("This movie does not exist");
     })
 
     .catch((err) => {
@@ -107,8 +105,10 @@ const updateMovie = (req, res) => {
   console.log(req.body);
 
   database
-    .query("update movies set title = ?, director = ?, year = ?, color = ?, duration = ? where id = ?",
-      [title, director, year, color, duration, id])
+    .query(
+      "update movies set title = ?, director = ?, year = ?, color = ?, duration = ? where id = ?",
+      [title, director, year, color, duration, id]
+    )
 
     .then(([result]) => {
       if (result.affectedRows === 0) {
@@ -149,5 +149,5 @@ module.exports = {
   getMovieById,
   postMovie,
   updateMovie,
-  deleteMovie
+  deleteMovie,
 };

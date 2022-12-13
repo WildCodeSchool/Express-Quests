@@ -3,7 +3,7 @@ const database = require("./database");
 const getUsers = (req, res) => {
   console.log(req.query);
   const initialSql =
-    "select firstname, lastname, email, city, language from users"; //enlever select * pour protéger données sensibles comme colonne hashedPassword
+    "select id,firstname, lastname, email, city, language from users"; //enlever select * pour protéger données sensibles comme colonne hashedPassword
   const where = [];
 
   if (req.query.language != null) {
@@ -80,6 +80,25 @@ const postUser = (req, res) => {
     });
 };
 
+
+const getUserByEmailWithPasswordAndPassToNext = (req, res, next) => {
+  const { email } = req.body;
+  database
+    .query("select * from users where email= ?", [email])
+    .then(([users]) => {
+      if (users[0] != null) {
+        req.user = users[0];
+        next()
+      } else {
+        res.sendStatus(401);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error retrieving data from database");
+    });
+};
+
 const updateUser = (req, res) => {
   const id = parseInt(req.params.id);
   const { firstname, lastname, email, city, language } = req.body;
@@ -131,4 +150,5 @@ module.exports = {
   postUser,
   updateUser,
   deleteUser,
+  getUserByEmailWithPasswordAndPassToNext
 };
