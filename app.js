@@ -6,7 +6,7 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 
-const port = process.env.APP_PORT ?? 5000;
+const port = process.env.APP_PORT ?? 5500;
 
 app.listen(port, (err) => {
   if (err) {
@@ -16,6 +16,8 @@ app.listen(port, (err) => {
   }
 });
 
+
+
 //welcome
 
 const welcome = (req, res) => {
@@ -23,6 +25,10 @@ const welcome = (req, res) => {
 };
 
 app.get("/", welcome);
+
+// password
+
+const { hashPassword } = require("./auth.js");
 
 // *****MOVIES
  
@@ -50,7 +56,7 @@ app.get("/api/users", userHandlers.getUsers);
 app.get("/api/users/:id", userHandlers.getUsersById);
 
 // modify Users
-app.post("/api/users", validatorUser.validateUser, userHandlers.postUser);
+app.post("/api/users", validatorUser.validateUser,hashPassword, userHandlers.postUser);
 app.put('/api/users/:id', userHandlers.updateUser, validatorUser.validateidSchema);
 
 // delete Users
