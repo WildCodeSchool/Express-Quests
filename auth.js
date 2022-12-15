@@ -78,7 +78,7 @@ const verifyToken = (req, res, next) => {
 
 const verifyPayloadId = (req,res,next) =>{
   try {
-    if (req.payload.sub == req.user.id ) {
+    if (req.payload.sub == req.users.id ) {
       next();
     } else {
       throw new Error("User id mismatch")
