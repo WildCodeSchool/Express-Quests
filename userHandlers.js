@@ -30,10 +30,10 @@ const getUserById = (req, res) => {
     });
 };
 const postUsers = (req, res) => {
-    const { firstname, lastname, email, city, } = req.body;
+    const { firstname, lastname, email, city } = req.body;
     database
     .query(
-      "INSERT INTO users(firstname, lastname, email, city, ) VALUES (?, ?, ?, ?)",
+      "INSERT INTO users(firstname, lastname, email, city ) VALUES (?, ?, ?, ?)",
       [firstname, lastname, email, city]
     )
     .then(([result]) => {
@@ -66,10 +66,28 @@ const postUsers = (req, res) => {
         res.status(500).send("Error editing the user");
       });
   };
+  const deleteUsers = (req, res) => {
+    const id = parseInt(req.params.id);
+  
+    database
+      .query("delete from users where id = ?", [id])
+      .then(([result]) => {
+        if (result.affectedRows === 0) {
+          res.status(404).send("Not Found");
+        } else {
+          res.sendStatus(204);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error deleting the user");
+      });
+  };
 
 module.exports = {
   getUsers,
   getUserById,
   postUsers,
-  updateUsers
+  updateUsers,
+  deleteUsers
 };
