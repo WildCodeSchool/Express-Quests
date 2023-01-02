@@ -110,4 +110,5 @@ VALUES
     'johanna.martino@example.com',
     'Milan',
     'Spanish'
-  );
+  )
+ ;
