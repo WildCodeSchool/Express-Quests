@@ -1,32 +1,7 @@
-const movies = [
-  {
-    id: 1,
-    title: "Citizen Kane",
-    director: "Orson Wells",
-    year: "1941",
-    colors: false,
-    duration: 120,
-  },
-  {
-    id: 2,
-    title: "The Godfather",
-    director: "Francis Ford Coppola",
-    year: "1972",
-    colors: true,
-    duration: 180,
-  },
-  {
-    id: 3,
-    title: "Pulp Fiction",
-    director: "Quentin Tarantino",
-    year: "1994",
-    color: true,
-    duration: 180,
-  },
-];
+const db = require("./db");
 
 const getMovies = (req, res) => {
-  res.json(movies);
+  db.query("SELECT * FROM movies").then(([movies]) => res.json(movies));
 };
 
 const getMovieById = (req, res) => {
@@ -41,7 +16,14 @@ const getMovieById = (req, res) => {
   }
 };
 
+const postMovie = (req, res) => {
+  const { title, director, year, color, duration } = req.body;
+
+  movies.push(movie);
+};
+
 module.exports = {
   getMovies,
   getMovieById,
+  postMovie,
 };
