@@ -1,8 +1,7 @@
-const databases = require("./database");
+const db = require("./db");
 
 const getUsers = (req, res) => {
-  databases
-    .query("select * from users")
+  db.query("select * from users")
     .then(([users]) => {
       res.json(users);
     })
