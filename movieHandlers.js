@@ -1,3 +1,4 @@
+const { json } = require("express");
 const db = require("./db");
 
 const getMovies = (req, res) => {
@@ -30,8 +31,25 @@ const getMovieById = (req, res) => {
 
 const postMovie = (req, res) => {
   const { title, director, year, color, duration } = req.body;
-
-  movies.push(movie);
+  db.query(
+    "insert into movies (title,director,year,color,duration) values (?,?,?,?,?)",
+    [title, director, year, color, duration]
+  )
+    .then(([result]) => {
+      const createMovie = {
+        id: result.insertId,
+        title,
+        director,
+        year,
+        color,
+        duration,
+      };
+      res.status(201).json(createMovie);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Failed to create movie");
+    });
 };
 
 module.exports = {
