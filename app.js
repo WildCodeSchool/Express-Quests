@@ -13,10 +13,15 @@ const usersHandlers = require("./usersHandlers");
 
 app.get("/api/movies", movieObj.getMovies);
 app.get("/api/movies/:id", movieObj.getMovieById);
+app.put("/api/movies/:id", movieObj.updateMovie);
+app.post("/api/movie", movieObj.postMovie);
+
+
+
 app.get("/api/users", usersHandlers.getUsers);
 app.get("/api/users/:id", usersHandlers.getUserById);
-app.post("/api/movie", movieObj.postMovie);
 app.get("/api/users", usersHandlers.postUsers);
+app.put("/api/users/:id", usersHandlers.updateUsers);
 
 
 app.listen(port, (err) => {
