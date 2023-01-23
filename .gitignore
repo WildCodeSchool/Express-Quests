@@ -1,2 +1,3 @@
 node_modules
 APP_PORT=5001
+.env

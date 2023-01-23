@@ -4,15 +4,19 @@ const express = require("express");
 
 const app = express();
 
+app.use(express.json()); //middleware à ajouter pour attraper les requêtes post entre autre
+
 const port = process.env.APP_PORT ?? 5001;
 
-const movieHandlers = require("./movieHandlers");
-const usersQuest2 = require("./usersQuest2");
+const movieObj = require("./movieHandlers");
+const usersHandlers = require("./usersHandlers");
 
-app.get("/api/movies", movieHandlers.getMovies);
-app.get("/api/movies/:id", movieHandlers.getMovieById);
-app.get("/api/users", usersQuest2.getUsers);
-app.get("/api/users/:id", usersQuest2.getUserById);
+app.get("/api/movies", movieObj.getMovies);
+app.get("/api/movies/:id", movieObj.getMovieById);
+app.get("/api/users", usersHandlers.getUsers);
+app.get("/api/users/:id", usersHandlers.getUserById);
+app.post("/api/movie", movieObj.postMovie);
+app.get("/api/users", usersHandlers.postUsers);
 
 
 app.listen(port, (err) => {
