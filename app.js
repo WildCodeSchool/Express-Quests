@@ -19,7 +19,11 @@ app.get("/api/movies/:id", movieHandlers.getMovieById);
 app.get("/api/users", movieHandlers.getUsers);
 app.get("/api/users/:id", movieHandlers.getUsersById);
 
-// app.post("/api/movies", movieHandlers.postMovie);
+app.post("/api/movies", movieHandlers.postMovie);
+app.post("/api/users", movieHandlers.postUser);
+
+app.put("/api/movies/:id", movieHandlers.updateMovie);
+app.put("/api/users/:id", movieHandlers.updateUsers);
 
 app.listen(port, (err) => {
   if (err) {
@@ -28,3 +32,12 @@ app.listen(port, (err) => {
     console.log(`Server is listening on ${port}`);
   }
 });
+// in app.js
+
+const { validateMovie } = require("./validators.js");
+
+app.post("/api/movies", validateMovie, movieHandlers.postMovie);
+
+const { validateUser } = require("./validators.js");
+
+app.post("/api/users", validateUser, movieHandlers.postUser);
