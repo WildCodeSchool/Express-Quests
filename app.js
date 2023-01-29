@@ -41,3 +41,7 @@ app.post("/api/movies", validateMovie, movieHandlers.postMovie);
 const { validateUser } = require("./validators.js");
 
 app.post("/api/users", validateUser, movieHandlers.postUser);
+
+app.delete("/api/movies/:id", movieHandlers.deleteMovie);
+
+app.delete("/api/users/:id", movieHandlers.deleteUsers);
