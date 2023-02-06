@@ -27,7 +27,7 @@ const movies = [
 
 const database = require("./database");
 
-const getMoviesFn = (req, res) => {
+const getMoviesFn = (req, res) => { // le contrôleur ping le model
   database
     .query("select * from movies")
     .then(([movies]) => {
