@@ -20,7 +20,7 @@ const getMovieById = (req, res) => {
     if (movies[0] != mull) {
       res.json(movies[0]);
     } else {
-      res.status(404).sen("Not found");
+      res.status(404).send("Not found");
     }
   }).catch((err) => {
     console.error(err);

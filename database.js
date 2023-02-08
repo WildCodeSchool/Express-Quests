@@ -16,9 +16,14 @@ database.getConnection().then(() =>{
     console.error(err);
 });
 
-database.query("select * from express_quests.movies").then(([result]) => {
-    const movies = result[0];
+database.query("select * from express_quests.movies").then(([movies]) => {
     console.log(movies);
+}).catch((err) => {
+    console.error(err);
+});
+
+database.query("select * from express_quests.users").then(([users]) => {
+    console.log(users);
 }).catch((err) => {
     console.error(err);
 });
