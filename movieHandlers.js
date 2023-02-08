@@ -17,8 +17,8 @@ const getMovieById = (req, res) => {
   const id = parseInt(req.params.id);
 
   database.query("select * from express_quests.movies where id = ?", [id]).then(([movies]) => {
-    if (movies[0] != mull) {
-      res.json(movies[0]);
+    if (movies[0] != null) {
+      res.status(200).json(movies[0]);
     } else {
       res.status(404).send("Not found");
     }
@@ -27,13 +27,13 @@ const getMovieById = (req, res) => {
     res.status(500).send("Error retrieving data from database");
   });
 
-  const movie = movies.find((movie) => movie.id === id);
+  // const movie = movies.find((movie) => movie.id === id);
 
-  if (movie != null) {
-    res.json(movie);
-  } else {
-    res.status(404).send("Not Found");
-  }
+  // if (movie != null) {
+  //   res.json(movie);
+  // } else {
+  //   res.status(404).send("Not Found");
+  // }
 };
 
 module.exports = {

@@ -17,11 +17,10 @@ const getUsers = (req, res) => {
 
 const getUserById = (req, res) => {
   const id = parseInt(req.params.id);
-
+console.log(id);
   database.query("select * from express_quests.users where id = ?", [id]).then(([users]) => {
-    if (users[0] != mull) {
-      res.json(users[0]);
-      res.status(200);
+    if (users[0] != null) {
+      res.status(200).json(users[0]);
     } else {
       res.status(404).send("Not found");
     }
@@ -29,14 +28,6 @@ const getUserById = (req, res) => {
     console.error(err);
     res.status(500).send("Error retrieving data from database");
   });
-
-  const user = users.find((user) => user.id === id);
-
-  if (user != null) {
-    res.json(user);
-  } else {
-    res.status(404).send("Not Found");
-  }
 };
 
 module.exports = {
