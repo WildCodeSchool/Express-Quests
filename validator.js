@@ -1,10 +1,10 @@
 const { body, validationResult } = require("express-validator");
 
 const validateMovie = [
-  body("title").isLength({ max: 255 }),
-  body("director").isLength({ max: 255 }),
-  body("year").isLength({ max: 255 }),
-  body("color").isLength({ max: 255 }),
+  body("title").isString().isLength({ max: 255 }),
+  body("director").isString().isLength({ max: 255 }),
+  body("year").isString().isLength({ max: 255 }),
+  body("color").isString().isLength({ max: 255 }),
   body("duration").isNumeric(),
   (req, res, next) => {
     const errors = validationResult(req);
@@ -16,22 +16,22 @@ const validateMovie = [
     }
   },
 ];
-// const validateUser = [
-//   body("email").isEmail(),
+const validateUser = [
+  body("email").isEmail(),
 
-//   body("firstname").isLength({ max: 255 }),
+  body("firstname").isLength({ max: 255 }),
 
-//   body("lastname").isLength({ max: 255 }),
+  body("lastname").isLength({ max: 255 }),
 
-//   (req, res, next) => {
-//     const errors = validationResult(req);
+  (req, res, next) => {
+    const errors = validationResult(req);
 
-//     if (!errors.isEmpty()) {
-//       res.status(422).json({ validationErrors: errors.array() });
-//     } else {
-//       next();
-//     }
-//   },
-// ];
+    if (!errors.isEmpty()) {
+      res.status(422).json({ validationErrors: errors.array() });
+    } else {
+      next();
+    }
+  },
+];
 
-module.exports = { validateMovie };
+module.exports = { validateMovie, validateUser };
