@@ -19,9 +19,11 @@ const validateMovie = [
 const validateUser = [
   body("email").isEmail(),
 
-  body("firstname").isLength({ max: 255 }),
-
-  body("lastname").isLength({ max: 255 }),
+  body("firstname").isString().isLength({ max: 255 }),
+  body("lastname").isString().isLength({ max: 255 }),
+  body("email").isEmail().isLength({ max: 255 }),
+  body("city").isString().isLength({ max: 255 }),
+  body("language").isString().isLength({ max: 255 }),
 
   (req, res, next) => {
     const errors = validationResult(req);
