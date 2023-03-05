@@ -12,11 +12,11 @@ const getUsers = (req, res) => {
       sqlValues.push(req.query.city);
     }
   } else if (req.query.city != null) {
-    sql += " where city = ?";
+    sql += " where city = ? ";
     sqlValues.push(req.query.city);
   }
 
-  db.query(sql)
+  db.query(sql, sqlValues)
     .then(([users]) => {
       res.json(users);
     })
