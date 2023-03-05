@@ -2,7 +2,15 @@ const { json } = require("express");
 const db = require("./db");
 
 const getMovies = (req, res) => {
-  db.query("select * from movies")
+  let sql = "select * from movies";
+  const sqlValues = [];
+
+  if (req.query.color != null) {
+    sql += " where color = ?";
+    sqlValues.push(req.query.color);
+  }
+
+  db.query(sql, sqlValues)
     .then(([movie]) => {
       res.json(movie);
     })
