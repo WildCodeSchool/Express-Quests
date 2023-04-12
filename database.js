@@ -11,18 +11,12 @@ const database = mysql.createPool({
 
    database
    .query("select * from movies")
-   .then((result) => {
-     console.log(result[0]);
-   })
    .catch((err) => {
     console.error(err);
    });
 
    database
    .query("select * from users")
-   .then((result) => {
-    console.log(result[0]);
-   })
    .catch((err) => {
     console.log(err);
    })
