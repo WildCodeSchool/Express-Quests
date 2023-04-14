@@ -39,8 +39,13 @@ const postUser = (req, res) => {
         "INSERT INTO users (firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)", [ firstname, lastname, email, city, language ]
     )
     .then(([result]) => {
-        console.log("New user created")
-        res.location(`/api/users/${result.insertId}`).sendStatus(201);
+        if (result.affectedRows > 0) {
+            res
+            .status(201).location(`/api/users/${result.insertId}`).send(`Your movie is created successfully with id ${result.insertId}`);
+        }
+        else {
+            res.status(403).send("Your request did not go through.")
+        }
     })
     .catch((err) => {
       console.error(err);
