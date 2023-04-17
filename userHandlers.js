@@ -1,6 +1,10 @@
 const database = require ("./database");
 
 const getUsers = (req, res) => {
+
+    // Before we need to check if the filter applies
+    console.log(req.query)
+    // req.query will catch the URL elements after the question mark
     database
     .query("select * from users")
     .then(([users]) => {
@@ -31,7 +35,53 @@ const getUsersById = (req, res) => {
     });
 }
 
+const postUser = (req, res) => {
+    const { firstname, lastname, email, city, language } = req.body;
+    
+    database
+    .query(
+        "INSERT INTO users (firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)", [ firstname, lastname, email, city, language ]
+    )
+    .then(([result]) => {
+        if (result.affectedRows > 0) {
+            res
+            .status(201).location(`/api/users/${result.insertId}`).send(`Your user is created successfully with id ${result.insertId}`);
+        }
+        else {
+            res.status(403).send("Your request did not go through.")
+        }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error saving the user");
+    });
+}
+
+    const updateUser = (req, res) => {
+    const { firstname, lastname, email, city, language } = req.body;
+    const id = parseInt(req.params.id);
+
+    database
+    .query(
+        "UPDATE users SET firstname=?, lastname=?, email=?, city=?, language=? WHERE id=?",
+        [firstname, lastname, email, city, language, id]
+    )
+    .then(([result]) => {
+        if (result.affectedRows === 0) {
+            res.status(404).send("Not Found");
+        } else {
+            res.sendStatus (204);
+        }
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error editing the user");
+      });
+    }
+
 module.exports = {
     getUsers,
-    getUsersById
+    getUsersById,
+    postUser,
+    updateUser
 };
