@@ -1,12 +1,24 @@
 const database = require ("./database");
 
 const getUsers = (req, res) => {
+    let sql = "SELECT * FROM users";
+    const sqlValues = [];
 
-    // Before we need to check if the filter applies
-    console.log(req.query)
-    // req.query will catch the URL elements after the question mark
+    if (req.query.language != null) {
+        sql += " WHERE language = ?";
+        sqlValues.push(req.query.language);
+
+        if (req.query.city != null) {
+            sql += " AND city = ?"
+            sqlValues.push(req.query.city)
+        }
+    } else if (req.query.city != null) {
+        sql += " WHERE city = ?"
+        sqlValues.push(req.query.city)
+    }
+
     database
-    .query("select * from users")
+    .query(sql, sqlValues)
     .then(([users]) => {
         res.status(200).json(users);
     })
