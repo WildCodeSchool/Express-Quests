@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 const port = process.env.APP_PORT ?? 5000;
+const { hashPassword } = require("./auth");
 
 const welcome = (req, res) => {
   res.send("Welcome to my favourite movie list");
@@ -20,8 +21,8 @@ app.delete("/api/movies/:id", movieHandlers.deleteMovie);
 const userHandlers = require("./userHandlers");
 app.get("/api/users", userHandlers.getUsers);
 app.get("/api/users/:id", userHandlers.getUsersById);
-app.post("/api/users", userHandlers.postUser);
-app.put("/api/users/:id", userHandlers.updateUser);
+app.post("/api/users", hashPassword, userHandlers.postUser);
+app.put("/api/users/:id", hashPassword, userHandlers.updateUser);
 app.delete("/api/users/:id", userHandlers.deleteUser);
 
 app.listen(port, (err) => {
