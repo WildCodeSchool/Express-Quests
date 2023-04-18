@@ -1,7 +1,8 @@
 const database = require ("./database");
+const { hashPassword } = require("./auth");
 
 const getUsers = (req, res) => {
-    let sql = "SELECT * FROM users";
+    let sql = "SELECT id, firstname, lastname, email, city, language FROM users";
     const sqlValues = [];
 
     if (req.query.language != null) {
@@ -32,7 +33,7 @@ const getUsersById = (req, res) => {
     const id = parseInt(req.params.id);
 
     database
-    .query("select * from users where id = ?", [id])
+    .query("select firstname, lastname, email, city, language from users where id = ?", [id])
     .then(([users]) => {
         if (users[0] != null) {
             res.status(200).json(users[0]);
@@ -48,11 +49,11 @@ const getUsersById = (req, res) => {
 }
 
 const postUser = (req, res) => {
-    const { firstname, lastname, email, city, language } = req.body;
+    const { firstname, lastname, email, city, language, hashedPassword } = req.body;
     
     database
     .query(
-        "INSERT INTO users (firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)", [ firstname, lastname, email, city, language ]
+        "INSERT INTO users (firstname, lastname, email, city, language, hashedPassword) VALUES (?, ?, ?, ?, ?, ?)", [ firstname, lastname, email, city, language, hashedPassword ]
     )
     .then(([result]) => {
         if (result.affectedRows > 0) {
@@ -70,13 +71,13 @@ const postUser = (req, res) => {
 }
 
     const updateUser = (req, res) => {
-    const { firstname, lastname, email, city, language } = req.body;
+    const { firstname, lastname, email, city, language, hashedPassword } = req.body;
     const id = parseInt(req.params.id);
 
     database
     .query(
-        "UPDATE users SET firstname=?, lastname=?, email=?, city=?, language=? WHERE id=?",
-        [firstname, lastname, email, city, language, id]
+        "UPDATE users SET firstname=?, lastname=?, email=?, city=?, language=?, hashedPassword=? WHERE id=?",
+        [firstname, lastname, email, city, language, hashedPassword, id]
     )
     .then(([result]) => {
         if (result.affectedRows === 0) {
