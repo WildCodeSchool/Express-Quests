@@ -73,7 +73,6 @@ const postUser = (req, res) => {
     const updateUser = (req, res) => {
     const { firstname, lastname, email, city, language, hashedPassword } = req.body;
     const id = parseInt(req.params.id);
-
     database
     .query(
         "UPDATE users SET firstname=?, lastname=?, email=?, city=?, language=?, hashedPassword=? WHERE id=?",
@@ -112,10 +111,29 @@ const postUser = (req, res) => {
           });        
     }
 
+const userLogin = (req, res, next) => {
+    const { email } = req.body;
+    database
+    .query("select * from users where email = ? ", [email])
+    .then(([users]) => {
+        if (users[0] != null) {
+            req.user = users [0];
+            next();
+        } else {
+            res.sendStatus(401);
+        }
+    })
+    .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error retrieving data from database");
+      });
+}
+
 module.exports = {
     getUsers,
     getUsersById,
     postUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    userLogin
 };

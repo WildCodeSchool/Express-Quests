@@ -21,8 +21,10 @@
   "homepage": "https://github.com/WildCodeSchool/Express-Quests#readme",
   "dependencies": {
     "argon2": "^0.30.3",
+    "crypto": "^1.0.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.1",
+    "jsonwebtoken": "^9.0.0",
     "mysql2": "^3.2.0"
   },
   "devDependencies": {
