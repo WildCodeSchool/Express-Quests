@@ -17,12 +17,30 @@ const getUserById = (req, res) => {
     if (users[0] != null) {
       res.json(users[0]);
     } else {
-      console.log("err");
       res.status(404).send("not found");
     }
   });
 };
+const postUsers = (req, res) => {
+  const { firstname, lastname, email, city, language } = req.body;
+  database
+    .query(
+      "INSERT INTO users(firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)",
+      [firstname, lastname, email, city, language]
+    )
+    .then(([result]) => {
+      res.location(`/api/users/${result.insertId}`).sendStatus(201);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("error saving the movie");
+    });
+  console.log(req.body);
+  res.send("Post route is working 🎉");
+};
+
 module.exports = {
   getUsers,
   getUserById,
+  postUsers,
 };

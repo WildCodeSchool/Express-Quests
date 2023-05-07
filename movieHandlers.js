@@ -48,18 +48,26 @@ const getMovieById = (req, res) => {
     }
   });
 };
-const getUsers = (req, res) => {
+const postMovie = (req, res) => {
+  const { title, director, year, color, duration } = req.body;
   database
-    .query("select * from users")
-    .then(([users]) => {
-      res.json(users).res.status(200);
+    .query(
+      "INSERT INTO movies(title, director, year, color, duration) VALUES (?, ?, ?, ?, ?)",
+      [title, director, year, color, duration]
+    )
+    .then(([result]) => {
+      res.location(`/api/movies/${result.insertId}`).sendStatus(201);
     })
     .catch((err) => {
-      console.error("rout not existed");
+      console.error(err);
+      res.status(500).send("error saving the movie");
     });
+  console.log(req.body);
+  res.send("Post route is working 🎉");
 };
 
 module.exports = {
   getMovies,
   getMovieById,
+  postMovie,
 };
