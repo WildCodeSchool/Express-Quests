@@ -1,10 +1,25 @@
 const database = require("./database");
 
 const getUsers = ((req, res) => {
+  let initialSql = "SELECT * FROM users";
+  const sqlValues = [];
+
+  if (req.query.language != null) {
+    initialSql += " WHERE language=?";
+    sqlValues.push(`${req.query.language}`);
+    if (req.query.city != null) {
+      initialSql += " WHERE city =?";
+      sqlValues.push(`${req.query.city}`)
+    }
+  } else if (req.query.city != null) {
+    initialSql += " WHERE city =?";
+    sqlValues.push(`${req.query.city}`)
+  }
     database
-        .query("select * from users")
+        .query(initialSql, sqlValues)
         .then(([users]) => {
             res.json(users);
+            res.status(200);
         })
         .catch((err) => {
             console.error(err);
