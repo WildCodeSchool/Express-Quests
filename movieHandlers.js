@@ -28,8 +28,24 @@ const movies = [
 ];
 
 const getMovies = (req, res) => {
+  let sql = "select * from movies";
+  const sqlValues = [];
+
+  if (req.query.color != null) {
+    sql += " where color = ?";
+    sqlValues.push(req.query.color);
+
+    if (req.query.max_duration != null) {
+      sql += " and duration <= ?";
+      sqlValues.push(req.query.max_duration);
+    }
+  } else if (req.query.max_duration != null) {
+    sql += " where duration <= ?";
+    sqlValues.push(req.query.max_duration);
+  }
+
   database
-    .query("select * from movies")
+    .query(sql, sqlValues)
     .then(([movies]) => {
       res.json(movies);
     })
@@ -58,8 +74,24 @@ const getMovieById = (req, res) => {
 };
 
 const getUsers = (req, res) => {
+  let sqls = "select * from users ";
+  const sqlValuess = [];
+
+  if (req.query.language != null) {
+    sqls += "where language = ?";
+    sqlValuess.push(req.query.language);
+
+    if (req.query.city != null) {
+      sqls += "and city = ?";
+      sqlValuess.push(req.query.city);
+    }
+  } else if (req.query.city != null) {
+    sqls += "where city = ?";
+    sqlValuess.push(req.query.city);
+  }
+
   database
-    .query("select * from users")
+    .query(sqls, sqlValuess)
     .then(([users]) => {
       res.json(users);
     })
@@ -171,6 +203,48 @@ const updateUser = (req, res) => {
       res.status(500).send("Error editing the users");
     });
 };
+const deleteMovie = (req, res) => {
+  const id = parseInt(req.params.id);
+
+  database
+
+    .query("delete from movies where id = ?", [id])
+
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.status(404).send("Not Found");
+      } else {
+        res.sendStatus(204);
+      }
+    })
+
+    .catch((err) => {
+      console.error(err);
+
+      res.status(500).send("Error deleting the movie");
+    });
+};
+const deleteUsers = (req, res) => {
+  const id = parseInt(req.params.id);
+
+  database
+
+    .query("delete from users where id = ?", [id])
+
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.status(404).send("Not Found");
+      } else {
+        res.sendStatus(204);
+      }
+    })
+
+    .catch((err) => {
+      console.error(err);
+
+      res.status(500).send("Error deleting the user");
+    });
+};
 module.exports = {
   getMovies,
   getMovieById,
@@ -180,4 +254,6 @@ module.exports = {
   postUsers,
   updateMovie,
   updateUser,
+  deleteMovie,
+  deleteUsers,
 };
