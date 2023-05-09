@@ -48,8 +48,32 @@ const postUsers = (req, res) => {
     });
 };
 
+//route PUT permettant de mettre à jour un utilisateur
+
+const updateUsers = (req, res) => {
+  const { firstname, lastname, email, city, language } = req.body;
+
+  database
+    .query(
+      "UPDATE users SET firstname = ?, lastname = ?, email = ?, city = ?, language = ? WHERE id = ?",
+      [firstname, lastname, email, city, language, req.params.id]
+    )
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.status(404).send("Not Found");
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error editing the user");
+    });
+};
+
 module.exports = {
   getUsers,
   getUsersById,
   postUsers,
+  updateUsers,
 };
