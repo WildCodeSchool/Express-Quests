@@ -21,6 +21,7 @@
   "homepage": "https://github.com/WildCodeSchool/Express-Quests#readme",
   "dependencies": {
     "express": "^4.18.1",
+    "joi": "^17.9.2",
     "mysql2": "^3.2.3"
   },
   "devDependencies": {
