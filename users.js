@@ -1,7 +1,25 @@
 const database = require('./database');
 const getUsers = (req, res) => {
+  const { language, city } = req.query;
+
+  let sql = 'SELECT * FROM users';
+
+  if (language) {
+    sql += ` WHERE language = '${language}'`;
+  }
+
+  if (city) {
+    if (language) {
+      sql += ' AND';
+    } else {
+      sql += ' WHERE';
+    }
+
+    sql += ` city = '${city}'`;
+  }
+
   database
-    .query('select * from users')
+    .query(sql)
     .then(([users]) => {
       res.json(users);
     })
@@ -10,6 +28,7 @@ const getUsers = (req, res) => {
       res.status(500).send('Error retrieving data from database');
     });
 };
+
 const getUserById = (req, res) => {
   const id = parseInt(req.params.id);
   database
