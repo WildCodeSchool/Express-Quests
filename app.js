@@ -13,6 +13,9 @@ const welcome = (req, res) => {
 
 app.get("/", welcome);
 
+app.put("/api/movies/:id", movieHandlers.updateMovie);
+
+
 const movieHandlers = require("./movieHandlers");
 const users = require("./users");
 
