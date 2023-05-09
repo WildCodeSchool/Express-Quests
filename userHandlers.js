@@ -48,7 +48,7 @@ const postUsers = (req, res) => {
     });
 };
 
-//route PUT permettant de mettre à jour un utilisateur
+//route PUT permettant de mettre à jour un utilisateur déjà existant dans la DB
 
 const updateUsers = (req, res) => {
   const { firstname, lastname, email, city, language } = req.body;
