@@ -1,12 +1,14 @@
+require("dotenv").config();
 const express = require("express");
+
 
 const app = express();
 
-const port = 5000;
+const port = process.env.APP_PORT ?? 5000;
 
-const welcome = (req, res) => {
+function welcome(req, res) {
   res.send("Welcome to my favourite movie list");
-};
+}
 
 app.get("/", welcome);
 
