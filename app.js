@@ -17,6 +17,11 @@ const movieHandlers = require("./movieHandlers");
 app.get("/api/movies", movieHandlers.getMovies);
 app.get("/api/movies/:id", movieHandlers.getMovieById);
 
+const userHandlers = require("./usersHandlers");
+
+app.get("/api/users", userHandlers.getUsers);
+app.get("/api/users/:id", userHandlers.getUsersById);
+
 app.listen(port, (err) => {
   if (err) {
     console.error("Something bad happened");

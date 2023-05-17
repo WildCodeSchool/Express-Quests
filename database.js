@@ -20,4 +20,4 @@ database
    console.error(err);
   });
   
-module.exports = database.js
+module.exports = database;
