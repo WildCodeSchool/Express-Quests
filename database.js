@@ -28,6 +28,4 @@ const database = mysql.createPool({
     console.error(err);
   });
 
- 
-
   module.exports = database;

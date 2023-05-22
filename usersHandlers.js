@@ -11,6 +11,8 @@ const getUsers = (req, res) => {
   });
 };
 
+
+ 
 const getUserById = (req, res) => {
   const id = parseInt(req.params.id);
 
@@ -26,10 +28,33 @@ const getUserById = (req, res) => {
   .catch((err) => {
     console.error(err);
     res.status(500).send("Error retrieving data from database");
-  });
+});
 };
+
+const postUsers = (req, res) => {
+  const { firstname, lastname, email, city, language } = req.body;
+
+database 
+.query(
+  "INSERT INTO users(firstname, lastname, email, city, language) VALUE (?, ?, ?, ?, ?)",
+  [firstname, lastname, email, city, language]
+)
+.then(([result]) => {
+  res.location(`/api/users/${result.insertId}`).sendStatus(201);
+
+})
+.catch((err) =>{
+console.error(err);
+res.status(500).send("error saving the users");
+});
+};
+
 
 module.exports = {
   getUsers,
   getUserById,
+  postUsers,
+  // putUser,
 };
+
+
