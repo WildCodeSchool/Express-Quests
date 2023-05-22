@@ -56,21 +56,6 @@ const getMovieById = (req, res) => {
     });
 };
 
-app.get("/api/users", (req, res)=>{
-  let movie = movies.find(movie => movie.id == (req.params.id))
-
-  if (movie != undefined){
-      res.status(200).send(movie)
-  } 
-})
-app.get("/api/users/:id", (req, res)=>{
-  let movie = movies.find(movie => movie.id == (req.params.id))
-
-  if (movie != undefined){
-      res.status(200).send(movie)
-  } else{
-      res.status(404).send('Not found')
-  }})
 module.exports = {
   getMovies,
   getMovieById,
