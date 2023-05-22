@@ -49,12 +49,28 @@ res.status(500).send("error saving the users");
 });
 };
 
+const putUsers = (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const { firstname, lastname, email, city, language } = req.body;
+
+  database
+    .query(
+      "UPDATE users SET firstname = ?, lastname = ?, email = ?, city = ?, language = ? where id = ?",
+      [firstname, lastname, email, city, language, id]
+    )
+    .then(([result]) => {
+      result.affectedRows === 1
+        ? res.status(200).send("Modified succesfully")
+        : res.status(404).send("NOT FOUND");
+    })
+    .catch((err) => res.status(500).send("Error: operation cancelled"));
+};
 
 module.exports = {
   getUsers,
   getUserById,
   postUsers,
-  // putUser,
+  putUsers,
 };
 
 

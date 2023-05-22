@@ -27,7 +27,7 @@ app.post("/api/movies", movieHandlers.postMovie);
 
 
 app.post("/api/users", usersHandlers.postUsers);
-// app.put("/api/users/:id", usersHandlers.putUser);
+app.put("/api/users/:id", usersHandlers.putUsers);
 
 
 
