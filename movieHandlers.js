@@ -25,22 +25,52 @@ const movies = [
   },
 ];
 
-const getMovies = (req, res) => {
-  res.json(movies);
-};
+const database = require("./database");
 
+const getMovies = (req, res) => {
+  database
+    .query("select * from movies")
+    .then(([movies]) => {
+      res.json(movies);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error retrieving data from database");
+    });
+};
 const getMovieById = (req, res) => {
   const id = parseInt(req.params.id);
 
-  const movie = movies.find((movie) => movie.id === id);
-
-  if (movie != null) {
-    res.json(movie);
-  } else {
-    res.status(404).send("Not Found");
-  }
+  database
+    .query("select * from movies where id = ?", [id])
+    .then(([movies]) => {
+      if (movies[0] != null) {
+        res.json(movies[0]);
+      } else {
+        res.status(404).send("Not Found");
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error retrieving data from database");
+    });
 };
 
+app.get("/api/users", (req, res)=>{
+  let movie = movies.find(movie => movie.id == (req.params.id))
+
+  if (movie != undefined){
+      res.status(200).send(movie)
+  } 
+})
+app.get("/api/users/:id", (req, res)=>{
+  let movie = movies.find(movie => movie.id == (req.params.id))
+
+  if (movie != undefined){
+      res.status(200).send(movie)
+  } else{
+      res.status(404).send('Not found')
+  }})
 module.exports = {
   getMovies,
   getMovieById,
