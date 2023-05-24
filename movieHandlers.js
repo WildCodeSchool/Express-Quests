@@ -25,23 +25,65 @@ const movies = [
   },
 ];
 
+const database = require("./database");
+
 const getMovies = (req, res) => {
-  res.json(movies);
+  database
+    .query("SELECT * FROM movies")
+    .then(([movies]) => {
+      res.json(movies);
+    })
+    .catch((err) => {
+      res.status(500).send("Error retrieving data from database");
+    });
 };
 
 const getMovieById = (req, res) => {
   const id = parseInt(req.params.id);
+  database
+    .query(`select * from movies where id = ?`, [id])
+    .then((result) => {
+      if (result[0] != null) {
+        res.json(result[0]);
+      } else {
+        res.status(404).send("Not found");
+      }
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
 
-  const movie = movies.find((movie) => movie.id === id);
+const getUsers = (req, res) => {
+  database
+    .query("SELECT * FROM users")
+    .then((users) => {
+      res.json(users[0][0]);
+    })
+    .catch((err) => {
+      res.send(err);
+    });
+};
 
-  if (movie != null) {
-    res.json(movie);
-  } else {
-    res.status(404).send("Not Found");
-  }
+const getUsersById = (req, res) => {
+  const id = req.params.id;
+  database
+    .query(`SELECT * FROM users WHERE id=?`, [id])
+    .then((result) => {
+      if (result[0][0] != null) {
+        res.json(result[0][0]);
+      } else {
+        res.status(404).send("Not Found");
+      }
+    })
+    .catch((err) => {
+      res.send(err);
+    });
 };
 
 module.exports = {
   getMovies,
   getMovieById,
+  getUsers,
+  getUsersById,
 };
