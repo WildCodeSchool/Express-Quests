@@ -1,3 +1,4 @@
+const { json } = require("express");
 const database = require("./database");
 
 const getMovies = (req, res) => {
@@ -18,7 +19,6 @@ const getMovieById = (req, res) => {
   database
     .query("select * from movies where id = ?", [id])
     .then(([movies]) => {
-      console.log(id, movies)
       if (movies.length) {
         res.json(movies[0])
       } else {
@@ -48,9 +48,32 @@ const postMovie = (req, res) => {
     });
 };
 
+const updateMovie = (req, res) => {
+  const id = parseInt(req.params.id)
+  const { title, director, year, color, duration } = req.body;
+
+  database
+    .query(
+      "UPDATE movies SET title = ?, director = ?, year = ?, color= ?, duration = ? WHERE id = ? ",
+      [title, director, year, color, duration, id]
+    )
+    .then(([results]) => {
+      if (results.affectedRows === 0) {
+        res.status(404).send('Not found')
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error editing the movie")
+    })
+}
+
 
 module.exports = {
   getMovies,
   getMovieById,
-  postMovie
+  postMovie,
+  updateMovie
 };
