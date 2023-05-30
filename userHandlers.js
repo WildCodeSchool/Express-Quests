@@ -21,12 +21,6 @@ const getUsers = (req, res) => {
     })
   }
 
-  console.log(userValues.map(({ value }) => value))
-  console.log(userValues.reduce((sql, { column, operator }, index) =>
-    `${sql} ${index === 0 ? 'WHERE' : 'AND'} ${column} ${operator} ?`, sqlInitial
-  ))
-
-
   database
     .query(userValues
       .reduce((sql, { column, operator }, index) =>
