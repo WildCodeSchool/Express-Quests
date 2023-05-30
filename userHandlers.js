@@ -1,8 +1,40 @@
 const database = require("./database");
 
 const getUsers = (req, res) => {
+  let sqlInitial = "SELECT * FROM users"
+  let userValues = []
+
+  if (req.query.language != null) {
+    // user += " WHERE language = ?";
+    userValues.push({
+      column: "language",
+      value: req.query.language,
+      operator: "="
+    })
+  };
+
+  if (req.query.city != null) {
+    userValues.push({
+      column: "city",
+      value: req.query.city,
+      operator: "="
+    })
+  }
+
+  console.log(userValues.map(({ value }) => value))
+  console.log(userValues.reduce((sql, { column, operator }, index) =>
+    `${sql} ${index === 0 ? 'WHERE' : 'AND'} ${column} ${operator} ?`, sqlInitial
+  ))
+
+
   database
-    .query('select * from users')
+    .query(userValues
+      .reduce((sql, { column, operator }, index) =>
+        `${sql} ${index === 0 ? 'WHERE' : 'AND'} ${column} ${operator} ?`,
+        sqlInitial
+      ),
+      userValues.map(({ value }) => value)
+    )
     .then(([users]) => {
       res.json(users)
     })
