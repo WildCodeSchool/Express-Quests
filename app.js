@@ -13,15 +13,18 @@ const welcome = (req, res) => {
 app.get("/", welcome);
 
 const movieHandlers = require("./movieHandlers");
+const validateMovies = require("./validators");
 
 app.get("/api/movies", movieHandlers.getMovies);
 app.get("/api/movies/:id", movieHandlers.getMovieById);
 app.get("/api/users", movieHandlers.getUsers);
 app.get("/api/users/:id", movieHandlers.getUsersById);
-app.post("/api/movies", movieHandlers.postMovies);
+app.post("/api/movies", validateMovies, movieHandlers.postMovies);
 app.post("/api/users", movieHandlers.postUsers);
 app.put("/api/movies/:id", movieHandlers.putMovies);
 app.put("/api/users/:id", movieHandlers.putUsers);
+app.delete("/api/movies/:id", movieHandlers.deleteMovie);
+app.delete("/api/users/:id", movieHandlers.deleteUser);
 
 app.listen(port, (err) => {
   if (err) {
