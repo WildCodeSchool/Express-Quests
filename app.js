@@ -40,3 +40,7 @@ app.listen(port, (err) => {
   }
 });
 
+const { hashPassword } = require("./auth.js");
+
+app.post("/api/users", hashPassword, usersHandlers.postUsers);
+app.put("/api/users/:id", hashPassword, usersHandlers.putUsers);
