@@ -53,6 +53,13 @@ VALUES
     '2008',
     '1',
     150
+  ),
+  (
+    'Whiplash',
+    'Damien Chazelle',
+    '2014',
+    '1',
+    107
   );
 
 DROP TABLE IF EXISTS users;
@@ -99,7 +106,7 @@ VALUES
   ),
   (
     'Jane',
-    'Doe',
+    'Does',
     'jane.doe@example.com',
     'London',
     'English'
