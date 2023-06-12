@@ -52,6 +52,26 @@ const getUsers = (req, res) => {
     });
 };
 
+const getUserByEmailWithPasswordAndPassToNext = (req, res, next) => {
+  const { email } = req.body;
+
+  database
+    .query("select * from users where email = ?", [email])
+    .then(([users]) => {
+      if (users[0] != null) {
+        req.user = users[0];
+
+        next();
+      } else {
+        res.sendStatus(401);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error retrieving data from database");
+    });
+};
+
 const getUserById = (req, res) => {
   const id = parseInt(req.params.id);
   database
@@ -95,6 +115,13 @@ const postUser = (req, res) => {
 };
 
 const updateUser = (req, res) => {
+  const userId = req.payload.sub; // Récupère l'ID de l'utilisateur à partir du payload du token
+
+  if (id !== userId) {
+    // Vérifie si l'ID ne correspond pas à celui du payload du token
+    return res.status(403).send("Forbidden");
+  }
+
   const id = parseInt(req.params.id);
   const { firstname, lastname, email, city, language, password } = req.body;
 
@@ -126,6 +153,12 @@ const updateUser = (req, res) => {
 
 const deleteUser =(req,res)=>{
   const id = parseInt(req.params.id)
+  const userId = req.payload.sub; // Récupère l'ID de l'utilisateur à partir du payload du token
+
+  if (id !== userId) {
+    // Vérifie si l'ID ne correspond pas à celui du payload du token
+    return res.status(403).send("Forbidden");
+  }
 
   database
   .query("delete from users where id = ?",
@@ -149,5 +182,6 @@ module.exports={
     getUserById,
     postUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getUserByEmailWithPasswordAndPassToNext
 }
