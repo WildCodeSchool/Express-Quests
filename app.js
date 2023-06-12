@@ -1,80 +1,36 @@
 const express = require("express");
+require("dotenv").config();
+
 const app = express();
-const port = 5000;
-
 app.use(express.json());
-
-const database = require("./database");
+const port = process.env.APP_PORT ?? 5000;
 
 const welcome = (req, res) => {
-  res.send("Welcome to my favourite movie list");
+	res.send("Welcome to my favourite movie list");
 };
 
 app.get("/", welcome);
 
-app.get("/api/users", async (req, res) => {
-  try {
-    const connection = await database.getConnection();
-    const [users] = await connection.query("SELECT * FROM users");
-    connection.release();
+const movieHandlers = require("./movieHandlers");
 
-    res.status(200).json(users);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
+app.get("/api/movies", movieHandlers.getMovies);
+app.get("/api/movies/:id", movieHandlers.getMovieById);
 
-app.get("/api/users/:id", async (req, res) => {
-  const userId = parseInt(req.params.id);
+app.post("/api/movies", movieHandlers.postMovie);
+app.put("/api/movies/:id", movieHandlers.updateMovie);
 
-  // Vérification si userId est un entier valide
-  if (isNaN(userId)) {
-    res.status(400).send("Invalid user ID");
-    return;
-  }
+const usersHandlers = require("./usersHandlers");
 
-  try {
-    const connection = await database.getConnection();
-    const [users] = await connection.query("SELECT * FROM users WHERE id = ?", [userId]);
-    connection.release();
+app.get("/api/users", usersHandlers.getUsers);
+app.get("/api/users/:id", usersHandlers.getUsersById);
 
-    if (users.length > 0) {
-      res.status(200).json(users[0]);
-    } else {
-      res.status(404).send("Not Found");
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
-app.post("/api/users", async (req, res) => {
-  const { firstname, lastname, email, city, language } = req.body;
-
-  // Vérification des données obligatoires
-  if (!firstname || !lastname || !email) {
-    res.status(400).send("Firstname, lastname, and email are required");
-    return;
-  }
-
-  try {
-    const connection = await database.getConnection();
-    await connection.query("INSERT INTO users (firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)", [firstname, lastname, email, city, language]);
-    connection.release();
-
-    res.status(201).send("User created successfully");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-});
+app.post("/api/users", usersHandlers.postUser);
+app.put("/api/users/:id", usersHandlers.updateUser);
 
 app.listen(port, (err) => {
-  if (err) {
-    console.error("Something bad happened");
-  } else {
-    console.log(`Server is listening on ${port}`);
-  }
+	if (err) {
+		console.error("Something bad happened");
+	} else {
+		console.log(`Server is listening on ${port}`);
+	}
 });
