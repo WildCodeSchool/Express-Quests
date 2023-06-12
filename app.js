@@ -9,6 +9,7 @@ app.use(express.json());
 const port = 5000;
 
 const { validateMovie, validateUser } = require('./validator');
+const {hashPassword}= require('./auth')
 
 const welcome = (req, res) => {
   res.send('Welcome to my favourite movie list');
@@ -30,6 +31,9 @@ app.get('/api/users/:id', users.getUserById);
 app.post('/api/users', validateUser, users.postUser);
 app.put('/api/users/:id', validateUser, users.updateUser);
 app.delete('api/users/:id', users.deleteUser)
+
+app.post('/api/users', hashPassword,users.postUser)
+app.put('api/users/:id', hashPassword,users.updateUser)
 
 app.listen(port, (err) => {
   if (err) {
