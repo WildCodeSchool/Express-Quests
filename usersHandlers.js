@@ -74,7 +74,7 @@ const deleteUsers = (req, res) => {
     const id = parseInt(req.params.id);
   
     database
-      .query("delete from users where id = ?", [id])
+      .query("delete from user where id = ?", [id])
       .then(([result]) => {
         if (result.affectedRows === 0) {
           res.status(404).send("Not Found");
