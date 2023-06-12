@@ -20,7 +20,11 @@
   },
   "homepage": "https://github.com/WildCodeSchool/Express-Quests#readme",
   "dependencies": {
-    "express": "^4.18.1"
+    "dotenv": "^16.1.4",
+    "express": "^4.18.1",
+    "joi": "^17.9.2",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.3.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.19"
