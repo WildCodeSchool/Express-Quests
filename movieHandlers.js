@@ -100,10 +100,13 @@ const updateMovie = (req, res) => {
       });
   };
 
+  
+
 module.exports = {
   getMovies,
   getMovieById,
   getMovies,
   postMovie,
   updateMovie,
+
 };
