@@ -28,6 +28,3 @@ module.exports = {
   hashPassword,
 };
 
-module.exports = {
-  hashPassword,
-};

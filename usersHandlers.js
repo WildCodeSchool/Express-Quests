@@ -1,3 +1,4 @@
+const { hash } = require("argon2");
 const database = require("./database");
 // const getUsers = (req, res) => {
 //   database
@@ -23,7 +24,7 @@ const database = require("./database");
 // };
 
 const getUsers = (req, res) => {
-  const initialSql = "select * from users";
+  const initialSql = "select id, firstname, lastname, email, city, language from users";
   const where = [];
 
   if (req.query.language != null) {
@@ -63,7 +64,7 @@ const getUserById = (req, res) => {
   const id = parseInt(req.params.id);
 
   database
-  .query("select * from users where id= ?", [id])
+  .query("select id,firstname, lastname, email, city, language from users where id= ?", [id])
   .then(([users]) => {
     if (users[0] != null) {
       res.json(users[0]);
@@ -78,12 +79,12 @@ const getUserById = (req, res) => {
 };
 
 const postUsers = (req, res) => {
-  const { firstname, lastname, email, city, language } = req.body;
+  const { firstname, lastname, email, city, language, hashedPassword } = req.body;
 
 database 
 .query(
-  "INSERT INTO users(firstname, lastname, email, city, language) VALUE (?, ?, ?, ?, ?)",
-  [firstname, lastname, email, city, language]
+  "INSERT INTO users(firstname, lastname, email, city, language, hashedPassword) VALUE (?, ?, ?, ?, ?, ?)",
+  [firstname, lastname, email, city, language, hashedPassword]
 )
 .then(([result]) => {
   res.location(`/api/users/${result.insertId}`).sendStatus(201);
@@ -97,12 +98,12 @@ res.status(500).send("error saving the users");
 
 const putUsers = (req, res) => {
   const id = parseInt(req.params.id, 10);
-  const { firstname, lastname, email, city, language } = req.body;
+  const { firstname, lastname, email, city, language, hashedPassword } = req.body;
 
   database
     .query(
-      "UPDATE users SET firstname = ?, lastname = ?, email = ?, city = ?, language = ? where id = ?",
-      [firstname, lastname, email, city, language, id]
+      "UPDATE users SET firstname = ?, lastname = ?, email = ?, city = ?, language = ?, hashedPassword = ? where id = ?",
+      [firstname, lastname, email, city, language, id, hashedPassword]
     )
     .then(([result]) => {
       result.affectedRows === 1
