@@ -44,3 +44,17 @@ app.listen(port, (err) => {
   }
 });
 
+const isItDwight = (req, res) => {
+  if (req.body.email === "dwight@theoffice.com" && req.body.password === "123456") {
+    res.send("Credentials are valid");
+  } else {
+    res.sendStatus(401);
+  }
+};
+
+app.post("/api/login", isItDwight);
+app.post(
+  "/api/login",
+  userHandlers.getUserByEmailWithPasswordAndPassToNext,
+  verifyPassword
+);
