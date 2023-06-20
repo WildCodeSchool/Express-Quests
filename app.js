@@ -16,23 +16,26 @@ app.get("/", welcome);
 const movieHandlers = require("./movieHandlers");
 const userHandlers = require("./userHandlers");
 
-app.get("/api/movies", movieHandlers.getMovies);
-app.get("/api/movies/:id", movieHandlers.getMovieById);
+const { validateMovie } = require("./validators.js");
+const { validateUser } = require("./validators.js");
 
-app.post("/api/movies", movieHandlers.postMovie);
+app.get("/api/movies", validateMovie, movieHandlers.getMovies);
+app.get("/api/movies/:id", validateMovie, movieHandlers.getMovieById);
 
-app.put("/api/movies/:id", movieHandlers.updateMovie);
+app.post("/api/movies", validateMovie, movieHandlers.postMovie);
 
-app.delete("/api/movies/:id", movieHandlers.deleteMovie);
+app.put("/api/movies/:id", validateMovie, movieHandlers.updateMovie);
 
-app.get("/api/users", userHandlers.getUsers);
-app.get("/api/users/:id", userHandlers.getUserById);
+app.delete("/api/movies/:id", validateMovie, movieHandlers.deleteMovie);
 
-app.post("/api/users", userHandlers.postUser);
+app.get("/api/users", validateUser, userHandlers.getUsers);
+app.get("/api/users/:id", validateUser, userHandlers.getUserById);
 
-app.put("/api/users/:id", userHandlers.updateUser);
+app.post("/api/users", validateUser, userHandlers.postUser);
 
-app.delete("/api/users/:id", userHandlers.deleteUser);
+app.put("/api/users/:id", validateUser, userHandlers.updateUser);
+
+app.delete("/api/users/:id", validateUser, userHandlers.deleteUser);
 
 
 app.listen(port, (err) => {
@@ -42,3 +45,5 @@ app.listen(port, (err) => {
     console.log(`Server is listening on ${port}`);
   }
 });
+
+
