@@ -14,17 +14,18 @@ app.get("/", welcome);
 // Les fonctions HANDLERS et qui redefini l'emplacement
 const movieHandlers = require("./movieHandlers");
 const userHandlers = require("./userHandlers");
+const { validateMovie, validateUser } = require("./validators.js");
 
 //Les routes
 app.get("/api/movies", movieHandlers.getMovies);//Pour les films
 app.get("/api/movies/:id", movieHandlers.getMovieById);
-app.post("/api/movies", movieHandlers.postMovie);//Ajout
-app.put("/api/movies/:id", movieHandlers.putMovieById);//Modification
+app.post("/api/movies", validateMovie, movieHandlers.postMovie);//Ajout quete 3 et 4bis
+app.put("/api/movies/:id", validateMovie, movieHandlers.putMovieById);//Modification quete 4 et 4bis
 
 app.get("/api/users", userHandlers.getUsers);//Pour les utilisateurs
 app.get("/api/users/:id", userHandlers.getUserById);
-app.post("/api/users", userHandlers.postUser);//Quete 3
-app.put("/api/users/:id",userHandlers.putUserById);//Quete 4
+app.post("/api/users", validateUser, userHandlers.postUser);//Quete 3 et 4bis
+app.put("/api/users/:id", validateUser,userHandlers.putUserById);//Quete 4 et 4bis
 
 //Ecouter le port et retourner une erreur
 app.listen(port, (err) => {
