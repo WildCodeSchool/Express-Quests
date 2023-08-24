@@ -1,8 +1,8 @@
-require("dotenv").config();
+require("dotenv").config(); // Permet d'exterioriser les varia secretes
 
-const express = require("express");
+const express = require("express");// Permet d'importer le framework express
 
-const app = express();
+const app = express();// Definit qu'on utilise express
 
 const port = 5000;
 
@@ -11,17 +11,18 @@ const welcome = (req, res) => {
 };
 
 app.get("/", welcome);
-
+// Les fonctions HANDLERS et qui redefini l'emplacement
 const movieHandlers = require("./movieHandlers");
-
-app.get("/api/movies", movieHandlers.getMovies);
-app.get("/api/movies/:id", movieHandlers.getMovieById);
-//Les users...Challenge
 const userHandlers = require("./userHandlers");
 
-app.get("/api/users", userHandlers.getUsers);
+//Les routes
+app.get("/api/movies", movieHandlers.getMovies);//Pour les films
+app.get("/api/movies/:id", movieHandlers.getMovieById);
+
+app.get("/api/users", userHandlers.getUsers);//Pour les utilisateurs
 app.get("/api/users/:id", userHandlers.getUserById);
 
+//Ecouter le port et retourner une erreur
 app.listen(port, (err) => {
   if (err) {
     console.error("Something bad happened");
