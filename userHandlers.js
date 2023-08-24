@@ -85,7 +85,28 @@ const getUserById = (req, res) => {
       res.status(500).send("Error modifying the movie");
     });
   }
+  //Quete 5 DELETE
+  const deleteUserById = (req,res) => {
+    const id = req.params.id;
   
+    database
+    .query(
+      "DELETE FROM users WHERE id = ?", 
+      [id]
+    )
+    .then(([result]) => {
+      if(result.affectedRows===0) {
+        res.status(404).send("Movie not found on this id")
+      } else {
+        res.sendStatus(204); //renvoie "NO CONTENT"
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error deleting the movie");
+    });
+    
+  }
 
 
 
@@ -93,6 +114,7 @@ const getUserById = (req, res) => {
     getUsers,
     getUserById,
     postUser,
-    putUserById,  
+    putUserById,
+    deleteUserById,  
   };
   

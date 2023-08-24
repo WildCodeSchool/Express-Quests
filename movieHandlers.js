@@ -96,9 +96,32 @@ const updateMovie = (req, res) => {
       res.status(500).send("Error editing the movie");
     });
 };
+//Quete 5 DELETE
+const deleteMovieById = (req,res) => {
+  const id = req.params.id;
+
+  database
+  .query(
+    "DELETE FROM movies WHERE id = ?", 
+    [id]
+  )
+  .then(([result]) => {
+    if(result.affectedRows===0) {
+      res.status(404).send("Movie not found on this id")
+    } else {
+      res.sendStatus(204); //renvoie "NO CONTENT"
+    }
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send("Error deleting the movie");
+  });
+  
+}
 module.exports = {
   getMovies,
   getMovieById,
   postMovie,
   updateMovie,
+  deleteMovieById,
 };
