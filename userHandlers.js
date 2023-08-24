@@ -43,7 +43,7 @@ const getUserById = (req, res) => {
       });
   };
 
-  //Quete 3
+  //Quete 3 Inserer un utilisateur
   const postUser = (req,res) => {
     const { firstname, lastname, email, city, language} = req.body;
   
@@ -61,9 +61,38 @@ const getUserById = (req, res) => {
     });
     
   }
+
+  //Quete 4 Modifier données
+  const putUserById = (req, res) => {
+    const id = req.params.id;
+    const { firstname, lastname, email, city, language} = req.body;
+    
+  
+    database
+    .query(
+      `UPDATE users SET firstname = ?, lastname = ?, email = ?, city = ?, language = ? WHERE id = ?`,
+      [firstname, lastname, email, city, language, id]
+    )
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.status(404).send("Not Found - invalid id");
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error modifying the movie");
+    });
+  }
+  
+
+
+
   module.exports = {
     getUsers,
     getUserById,
     postUser,
+    putUserById,  
   };
   

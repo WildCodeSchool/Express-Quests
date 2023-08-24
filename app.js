@@ -18,11 +18,13 @@ const userHandlers = require("./userHandlers");
 //Les routes
 app.get("/api/movies", movieHandlers.getMovies);//Pour les films
 app.get("/api/movies/:id", movieHandlers.getMovieById);
-app.post("/api/movies", movieHandlers.postMovie);
+app.post("/api/movies", movieHandlers.postMovie);//Ajout
+app.put("/api/movies/:id", movieHandlers.putMovieById);//Modification
 
 app.get("/api/users", userHandlers.getUsers);//Pour les utilisateurs
 app.get("/api/users/:id", userHandlers.getUserById);
 app.post("/api/users", userHandlers.postUser);//Quete 3
+app.put("/api/users/:id",userHandlers.putUserById);//Quete 4
 
 //Ecouter le port et retourner une erreur
 app.listen(port, (err) => {
