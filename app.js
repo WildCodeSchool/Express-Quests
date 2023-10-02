@@ -7,15 +7,17 @@ const app = express();
 const port = 5000;
 
 const welcome = (req, res) => {
-  res.send("Welcome to my favourite Users list");
+  res.send("Welcome to my favourite users list");
 };
 
 app.get("/", welcome);
 
+app.use(express.json());
 const movieHandlers = require("./movieHandlers");
 
-app.get("/api/users", movieHandlers.getMovies);
-app.get("/api/users/:id", movieHandlers.getMovieById);
+app.get("/api/users", movieHandlers.getusers);
+app.get("/api/users/:id", movieHandlers.getuserById);
+app.post("/api/users", movieHandlers.postuser);
 
 app.listen(port, (err) => {
   if (err) {
