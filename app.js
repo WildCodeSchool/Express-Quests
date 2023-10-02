@@ -7,7 +7,7 @@ const app = express();
 const port = 5000;
 
 const welcome = (req, res) => {
-  res.send("Welcome to my favourite User list");
+  res.send("Welcome to my favourite Users list");
 };
 
 app.get("/", welcome);
