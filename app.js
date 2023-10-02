@@ -18,7 +18,9 @@ const movieHandlers = require("./movieHandlers");
 app.get("/api/users", movieHandlers.getusers);
 app.get("/api/users/:id", movieHandlers.getuserById);
 app.post("/api/users", movieHandlers.postuser);
-app.put("/api/users/:id", movieHandlers.updateUser)
+app.put("/api/users/:id", movieHandlers.updateUser);
+app.delete("/api/users/:id", movieHandlers.deleteUser);
+
 app.listen(port, (err) => {
   if (err) {
     console.error("Something bad happened");
