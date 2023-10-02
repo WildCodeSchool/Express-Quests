@@ -17,6 +17,8 @@ app.get("/api/users", movieHandlers.getUsers);
 app.get("/api/users/:id", movieHandlers.getUserById);
 app.post("/api/users", movieHandlers.postUser);
 app.put("/api/users/:id", movieHandlers.updateUser);
+app.delete("/api/musers/:id", movieHandlers.deleteUser);
+
 
 
 
