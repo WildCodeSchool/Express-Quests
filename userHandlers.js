@@ -1,25 +1,5 @@
 const database = require("./database");
 
-const users = [
-  {
-    id: 1,
-    name: "Jason Statham",
-   
-  },
-  {
-    id: 2,
-    name: "Vin Diesel",
-
-  
-  },
-  {
-    id: 3,
-    name: "Jackie Chan",
-    
-  },
-];
-
-
 const getUsers = (req, res) => {
   database
     .query("select * from users")
