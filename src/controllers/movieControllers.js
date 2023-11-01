@@ -124,10 +124,28 @@ const getUserById = (req, res) => {
     });
 };
 
+const postUsers = (req, res) => {
+  const { firstname, lastname, email, city, language } = req.body;
+  
+  database
+    .query(
+      "INSERT INTO users(firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)", /*Requête SQL*/
+      [firstname, lastname, email, city, language] /*Valeurs du tableau qui vont être utilisés, l'ordre des éléments compte, le premier ? sera remplacé par le premier élément du tableau...*/
+    )
+    .then(([result]) => {
+        res.status(201).send({id: result.insertId});
+    })
+    .catch((err) => {
+        console.error(err);
+        res.sendStatus(500);
+    });
+};
+
 module.exports = {
   getMovies,
   getMovieById,
   getUsers,
   getUserById,
   postMovies,
+  postUsers,
 };
