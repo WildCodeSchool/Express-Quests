@@ -112,4 +112,6 @@ module.exports = {
   getMovieById,
   getUsers,
   getUserById,
+  postMovies,
+  postUsers,
 };
