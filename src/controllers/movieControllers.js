@@ -76,6 +76,23 @@ const getMovieById = (req, res) => {
     });
 };
 
+const postMovies = (req, res) => {
+  const { title, director, year, color, duration } = req.body;
+  
+  database
+    .query(
+      "INSERT INTO movies(title, director, year, color, duration) VALUES (?, ?, ?, ?, ?)", /*Requête SQL*/
+      [title, director, year, color, duration] /*Valeurs du tableau qui vont être utilisés, l'ordre des éléments compte, le premier ? sera remplacé par le premier élément du tableau...*/
+    )
+    .then(([result]) => {
+        res.status(201).send({id: result.insertId});
+    })
+    .catch((err) => {
+        console.error(err);
+        res.sendStatus(500);
+    });
+};
+
 const getUsers = (req, res) => {
   database
     .query("select * from users")
@@ -112,4 +129,5 @@ module.exports = {
   getMovieById,
   getUsers,
   getUserById,
+  postMovies,
 };
