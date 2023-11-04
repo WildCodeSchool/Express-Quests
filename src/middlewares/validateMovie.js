@@ -33,6 +33,4 @@ const validateMovie = (req, res, next) => {
     }
   };
 
-module.exports = {
-    validateMovie,
-  };
+module.exports = validateMovie;
