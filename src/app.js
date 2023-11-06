@@ -3,6 +3,8 @@ require("dotenv").config();
 
 const app = express();
 
+app.use(express.json());
+
 const userControllers = require("./controllers/userControllers");
 
 const movieControllers = require("./controllers/movieControllers");
