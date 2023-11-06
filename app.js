@@ -1,52 +1,18 @@
 const express = require("express");
+require("dotenv").config();
+
 const app = express();
 
-const movies = [
-  {
-    id: 1,
-    title: "Citizen Kane",
-    director: "Orson Welles",
-    year: "1941",
-    colors: false,
-    duration: 120,
-  },
-  {
-    id: 2,
-    title: "The Godfather",
-    director: "Francis Ford Coppola",
-    year: "1972",
-    colors: true,
-    duration: 180,
-  },
-  {
-    id: 3,
-    title: "Pulp Fiction",
-    director: "Quentin Tarantino",
-    year: "1994",
-    color: true,
-    duration: 180,
-  },
-];
+app.use(express.json());
 
-const getMovies = (req, res) => {
-  res.json(movies);
-};
+const userControllers = require("./controllers/userControllers");
 
-app.get("/api/movies", getMovies);
+const movieControllers = require("./controllers/movieControllers");
 
-const getMovieById = (req, res) => {
-  const id = parseInt(req.params.id);
-  const movie = movies.find((movie) => movie.id === id);
+app.get("/api/movies", movieControllers.getMovies);
+app.get("/api/movies/:id", movieControllers.getMovieById);
 
-  if (movie != null) {
-    res.json(movie);
-  } else {
-    res.sendStatus(404);
-  }
-};
-
-app.post("/api/movies", movieHandlers.postMovie);
-
-app.get("/api/movies/:id", getMovieById);
+app.get("/api/users", userControllers.getUsers);
+app.get("/api/users/:id", userControllers.getUsersById);
 
 module.exports = app;
