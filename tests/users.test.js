@@ -1,4 +1,5 @@
 const request = require("supertest");
+const crypto = require("node:crypto");
 const app = require("../src/app");
 
 describe("GET /api/users", () => {
