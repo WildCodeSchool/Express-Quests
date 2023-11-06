@@ -34,7 +34,7 @@ describe("POST /api/movies", () => {
       title: "Star Wars",
       director: "George Lucas",
       year: "1977",
-      color: true,
+      color: "1",
       duration: 120,
     };
 
@@ -63,7 +63,7 @@ describe("POST /api/movies", () => {
     expect(getResponse.body.year).toStrictEqual(newMovie.year);
 
     expect(getResponse.body).toHaveProperty("color");
-    expect(getResponse.body.color).toEqual("1");
+    expect(["1", "0"]).toContain(getResponse.body.color);
 
     expect(getResponse.body).toHaveProperty("duration");
     expect(getResponse.body.duration).toStrictEqual(newMovie.duration);

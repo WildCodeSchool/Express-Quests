@@ -47,15 +47,40 @@ const movies = [
 /*ICI ON CREE LES REQUETES A LA BASE DE DONNEES ET ON LES EXPORTE */
 
 const getMovies = (req, res) => { /*Requête qui communique avec ma base de données express_quests.sql*/
-  database
-    .query("select * from movies")  /*Je fais la requête SQL par ce '.query' */
-    .then(([movies]) => {
-      res.json(movies);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
+const initialSql = "select * from movies";
+const where = [];
+
+if (req.query.color != null) {
+  where.push({
+    column: "color",
+    value: req.query.color,
+    operator: "=",
+  });
+}
+if (req.query.max_duration != null) {
+  where.push({
+    column: "duration",
+    value: req.query.max_duration,
+    operator: "<=",
+  });
+}
+
+database
+  .query(
+    where.reduce(
+      (sql, { column, operator }, index) =>
+        `${sql} ${index === 0 ? "where" : "and"} ${column} ${operator} ?`,
+      initialSql
+    ),
+    where.map(({ value }) => value)
+  )
+  .then(([movies]) => {
+    res.json(movies);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send("Error retrieving data from database");
+  });
 };
 
 const getMovieById = (req, res) => {
@@ -94,14 +119,31 @@ const postMovies = (req, res) => {
 };
 
 const getUsers = (req, res) => {
+
+  let sql = "select * from users";
+  const sqlValues = [];
+
+  if (req.query.language != null) {
+    sql += " where language = ?";
+    sqlValues.push(req.query.language);
+
+    if (req.query.city != null) {
+      sql += " and city = ?";
+      sqlValues.push(req.query.city);
+    }
+  } else if (req.query.city != null) {
+    sql += " where city = ?";
+    sqlValues.push(req.query.city);
+  }
+
   database
-    .query("select * from users")
+    .query(sql, sqlValues)
     .then(([users]) => {
       res.json(users);
     })
     .catch((err) => {
       console.error(err);
-      res.sendStatus(500);
+      res.sendStatus(500).send("Error retrieving data from database");
     });
 };
 
