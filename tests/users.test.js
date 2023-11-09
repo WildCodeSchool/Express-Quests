@@ -28,6 +28,7 @@ describe("GET /api/users/:id", () => {
   });
 });
 
+
 describe("POST /api/users", () => {
   it("should return created user", async () => {
     const newUser = {
@@ -70,3 +71,4 @@ describe("POST /api/users", () => {
     expect(response.status).toEqual(500);
   });
 });
+
