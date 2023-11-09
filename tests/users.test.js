@@ -65,6 +65,8 @@ describe("POST /api/users", () => {
       .post("/api/users")
       .send(userWithMissingProps);
 
+    expect(response.status).toEqual(422);
+
     expect(response.status).toEqual(500);
   });
 });
