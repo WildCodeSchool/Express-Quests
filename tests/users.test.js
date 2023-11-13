@@ -80,3 +80,82 @@ describe("POST /api/users", () => {
     expect(response.status).toEqual(500);
   });
 });
+
+
+describe("PUT /api/users/:id", () => {
+  it("should edit user", async () => {
+    const newUser = {
+      firstname: "Titi",
+      lastname: "The Piou",
+      email: "titi@thepiou.com",
+      city: "Paris",
+      language: "French",
+    };
+
+    const [result] = await database.query(
+      "INSERT INTO users(firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)",
+      [newUser.firstname, newUser.lastname, newUser.email, newUser.city, newUser.language]
+    );
+
+    const id = result.insertId;
+
+    const updatedUser = {
+      firstname: "Valeriy",
+      lastname: "Appius",
+      email: "valeriy.appius@example.com",
+      city: "Moscow",
+      language: "Russian"
+    };
+
+    const response = await request(app)
+      .put(`/api/users/${id}`)
+      .send(updatedUser);
+
+    expect(response.status).toEqual(204);
+
+    [result] = await database.query("SELECT * FROM users WHERE id=?", id);
+
+    const [userInDatabase] = result;
+
+    expect(userInDatabase).toHaveProperty("id");
+
+    expect(userInDatabase).toHaveProperty("firstname");
+    expect(userInDatabase.firstname).toStrictEqual(updatedUser.firstname);
+
+    expect(userInDatabase).toHaveProperty("lastname");
+    expect(userInDatabase.lastname).toStrictEqual(updatedUser.lastname);
+
+    expect(userInDatabase).toHaveProperty("email");
+    expect(userInDatabase.email).toStrictEqual(updatedUser.email);
+
+    expect(userInDatabase).toHaveProperty("city");
+    expect(userInDatabase.city).toStrictEqual(updatedUser.city);
+
+    expect(userInDatabase).toHaveProperty("language");
+    expect(userInDatabase.language).toStrictEqual(updatedUser.language);
+  });
+
+  it("should return an error", async () => {
+    const userWithMissingProps = { firstname: "Grosminet" };
+
+    const response = await request(app)
+      .put(`/api/users/1`)
+      .send(userWithMissingProps);
+
+    expect(response.status).toEqual(500);
+  });
+
+  it("should return no user", async () => {
+    const newUser = {
+      firstname: "Grosminet",
+      lastname: "Lechat",
+      email: "grosminet@lechat.com",
+      city: "Paris",
+      language: "French",
+    };
+
+    const response = await request(app).put("/api/users/0").send(newUser);
+
+    expect(response.status).toEqual(404);
+  });
+});
