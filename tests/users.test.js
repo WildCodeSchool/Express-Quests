@@ -3,6 +3,8 @@ const crypto = require("node:crypto");
 
 const app = require("../src/app");
 
+/*TEST GET */
+
 describe("GET /api/users", () => {
   it("should return all users", async () => {
     const response = await request(app).get("/api/users");
@@ -12,6 +14,9 @@ describe("GET /api/users", () => {
     expect(response.status).toEqual(200);
   });
 });
+
+
+/*TEST GET ID */
 
 describe("GET /api/users/:id", () => {
   it("should return one user", async () => {
@@ -28,6 +33,9 @@ describe("GET /api/users/:id", () => {
     expect(response.status).toEqual(404);
   });
 });
+
+
+/*TEST POST */
 
 describe("POST /api/users", () => {
   it("should return created user", async () => {
@@ -77,10 +85,51 @@ describe("POST /api/users", () => {
       .post("/api/users")
       .send(movieWithMissingProps);
 
-    expect(response.status).toEqual(500);
+    expect(response.status).toEqual(422);
+  });
+   it("should return an error", async () => {
+    const userWithMissingProps = { lastname: "Potter" };
+
+    const response = await request(app)
+      .post("/api/users")
+      .send(userWithMissingProps);
+
+    expect(response.status).toEqual(422);
+  });
+
+  it("should return an error", async () => {
+    const userWithMissingProps = { email: "harry@potter.com" };
+
+    const response = await request(app)
+      .post("/api/users")
+      .send(userWithMissingProps);
+
+    expect(response.status).toEqual(422);
+  });
+
+  it("should return an error", async () => {
+    const userWithMissingProps = { city: "Paris" };
+
+    const response = await request(app)
+      .post("/api/users")
+      .send(userWithMissingProps);
+
+    expect(response.status).toEqual(422);
+  });
+
+  it("should return an error", async () => {
+    const userWithMissingProps = { language: "French" };
+
+    const response = await request(app)
+      .post("/api/users")
+      .send(userWithMissingProps);
+
+    expect(response.status).toEqual(422);
   });
 });
 
+
+/*TEST PUT */
 
 describe("PUT /api/users/:id", () => {
   it("should edit user", async () => {
@@ -142,7 +191,43 @@ describe("PUT /api/users/:id", () => {
       .put(`/api/users/1`)
       .send(userWithMissingProps);
 
-    expect(response.status).toEqual(500);
+    expect(response.status).toEqual(422);
+  });
+  it("should return an error", async () => {
+    const userWithMissingProps = { lastname: "TheCat" };
+
+    const response = await request(app)
+      .put(`/api/users/1`)
+      .send(userWithMissingProps);
+
+    expect(response.status).toEqual(422);
+  });
+   it("should return an error", async () => {
+    const userWithMissingProps = { email: "grosminet@thecat.com" };
+
+    const response = await request(app)
+      .put(`/api/users/1`)
+      .send(userWithMissingProps);
+
+    expect(response.status).toEqual(422);
+  });
+   it("should return an error", async () => {
+    const userWithMissingProps = { city: "Paris" };
+
+    const response = await request(app)
+      .put(`/api/users/1`)
+      .send(userWithMissingProps);
+
+    expect(response.status).toEqual(422);
+  });
+   it("should return an error", async () => {
+    const userWithMissingProps = { language: "French" };
+
+    const response = await request(app)
+      .put(`/api/users/1`)
+      .send(userWithMissingProps);
+
+    expect(response.status).toEqual(422);
   });
 
   it("should return no user", async () => {
@@ -155,6 +240,25 @@ describe("PUT /api/users/:id", () => {
     };
 
     const response = await request(app).put("/api/users/0").send(newUser);
+
+    expect(response.status).toEqual(404);
+  });
+});
+
+
+/*TEST DELETE*/
+
+describe("DELETE /api/users/:id", () => {
+  it("should delete one user", async () => {
+    const response = await request(app).delete("/api/users/1");
+
+    expect(response.headers["content-type"]).toMatch(/json/);
+
+    expect(response.status).toEqual(201);
+  });
+
+  it("should delete no user", async () => {
+    const response = await request(app).delete("/api/users/0");
 
     expect(response.status).toEqual(404);
   });
