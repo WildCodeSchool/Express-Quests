@@ -142,7 +142,43 @@ describe("PUT /api/users/:id", () => {
       .put(`/api/users/1`)
       .send(userWithMissingProps);
 
-    expect(response.status).toEqual(500);
+    expect(response.status).toEqual(422);
+  });
+  it("should return an error", async () => {
+    const userWithMissingProps = { lastname: "TheCat" };
+
+    const response = await request(app)
+      .put(`/api/users/1`)
+      .send(userWithMissingProps);
+
+    expect(response.status).toEqual(422);
+  });
+   it("should return an error", async () => {
+    const userWithMissingProps = { email: "grosminet@thecat.com" };
+
+    const response = await request(app)
+      .put(`/api/users/1`)
+      .send(userWithMissingProps);
+
+    expect(response.status).toEqual(422);
+  });
+   it("should return an error", async () => {
+    const userWithMissingProps = { city: "Paris" };
+
+    const response = await request(app)
+      .put(`/api/users/1`)
+      .send(userWithMissingProps);
+
+    expect(response.status).toEqual(422);
+  });
+   it("should return an error", async () => {
+    const userWithMissingProps = { language: "French" };
+
+    const response = await request(app)
+      .put(`/api/users/1`)
+      .send(userWithMissingProps);
+
+    expect(response.status).toEqual(422);
   });
 
   it("should return no user", async () => {
