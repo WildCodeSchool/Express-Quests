@@ -21,5 +21,7 @@ app.post("/api/movies", validateMovie, movieControllers.postMovies);
 app.post("/api/users", validateUser, movieControllers.postUsers);
 app.put("/api/movies/:id", movieControllers.updateMovie);
 app.put("/api/users/:id", movieControllers.updateUser);
+app.delete("/api/movies/:id", movieControllers.deleteMovie);
+app.delete("/api/users/:id", movieControllers.deleteUser);
 
 module.exports = app;

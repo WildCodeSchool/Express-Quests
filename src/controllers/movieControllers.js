@@ -46,6 +46,9 @@ const movies = [
 
 /*ICI ON CREE LES REQUETES A LA BASE DE DONNEES ET ON LES EXPORTE */
 
+
+/* MOVIES */
+
 const getMovies = (req, res) => { /*Requête qui communique avec ma base de données express_quests.sql*/
 const initialSql = "select * from movies";
 const where = [];
@@ -83,6 +86,7 @@ database
   });
 };
 
+
 const getMovieById = (req, res) => {
   const id = parseInt(req.params.id);
 
@@ -101,6 +105,7 @@ const getMovieById = (req, res) => {
     });
 };
 
+
 const postMovies = (req, res) => {
   const { title, director, year, color, duration } = req.body;
   
@@ -117,6 +122,7 @@ const postMovies = (req, res) => {
         res.sendStatus(500);
     });
 };
+
 
 const updateMovie = (req, res) => {
   const id = parseInt(req.params.id);
@@ -140,6 +146,28 @@ const updateMovie = (req, res) => {
     });
 };
 
+
+const deleteMovie = (req, res) => {
+  const id = parseInt(req.params.id);
+
+  database
+    .query("delete from movies where id = ?", [id])
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.sendStatus(404);
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
+
+
+
+/* USERS */
 
 const getUsers = (req, res) => {
 
@@ -189,6 +217,7 @@ const getUserById = (req, res) => {
     });
 };
 
+
 const postUsers = (req, res) => {
   const { firstname, lastname, email, city, language } = req.body;
   
@@ -205,6 +234,7 @@ const postUsers = (req, res) => {
         res.sendStatus(500);
     });
 };
+
 
 const updateUser = (req, res) => {
   const id = parseInt(req.params.id);
@@ -228,6 +258,26 @@ const updateUser = (req, res) => {
     });
 };
 
+const deleteUser = (req, res) => {
+  const id = parseInt(req.params.id);
+
+  database
+    .query("delete from users where id = ?", [id])
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.sendStatus(404);
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
+
+
+
 module.exports = {
   getMovies,
   getMovieById,
@@ -237,4 +287,6 @@ module.exports = {
   postUsers,
   updateMovie,
   updateUser,
+  deleteMovie,
+  deleteUser
 };
