@@ -141,7 +141,43 @@ describe("PUT /api/movies/:id", () => {
       .put(`/api/movies/1`)
       .send(movieWithMissingProps);
 
+    expect(response.status).toEqual(422);
+  });
+   it("should return an error", async () => {
+    const movieWithMissingProps = { director: "Georges Lucas" };
+
+    const response = await request(app)
+      .put(`/api/movies/1`)
+      .send(movieWithMissingProps);
+
     expect(response.status).toEqual(500);
+  });
+   it("should return an error", async () => {
+    const movieWithMissingProps = { year: "3000" };
+
+    const response = await request(app)
+      .put(`/api/movies/1`)
+      .send(movieWithMissingProps);
+
+    expect(response.status).toEqual(422);
+  });
+   it("should return an error", async () => {
+    const movieWithMissingProps = { color: true};
+
+    const response = await request(app)
+      .put(`/api/movies/1`)
+      .send(movieWithMissingProps);
+
+    expect(response.status).toEqual(422);
+  });
+   it("should return an error", async () => {
+    const movieWithMissingProps = { duration: 120 };
+
+    const response = await request(app)
+      .put(`/api/movies/1`)
+      .send(movieWithMissingProps);
+
+    expect(response.status).toEqual(422);
   });
 
   it("should return no movie", async () => {
