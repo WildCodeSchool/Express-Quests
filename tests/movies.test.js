@@ -1,6 +1,6 @@
 const request = require("supertest");
-
 const app = require("../src/app");
+const database = require("../database")
 
 describe("GET /api/movies", () => {
   it("should return all movies", async () => {
@@ -27,3 +27,5 @@ describe("GET /api/movies/:id", () => {
     expect(response.status).toEqual(404);
   });
 });
+
+afterAll(() => database.end());
