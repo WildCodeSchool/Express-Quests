@@ -13,6 +13,7 @@ app.get("/api/movies/:id", movieControllers.getMovieById);
 const userControllers = require ("./controllers/userControllers");
 
 app.get("/api/users", userControllers.getUsers);
+app.post("/api/users", userControllers.postUser);
 app.get("/api/users/:id", userControllers.getUserById);
 
 module.exports = app;

@@ -12,6 +12,21 @@ const getUsers = (req, res) => {
     });
 };
 
+const postUser = (req, res) => {
+  const { firstname, lastname, email, city, language } = req.body;
+
+  database.query( "INSERT INTO users(firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)",
+  [firstname, lastname, email, city, language]
+  )
+  .then(([result]) => {
+res.status(201).send({ id: result.insertId});
+  })
+  .catch((err) => {
+    console.error(err);
+    res.sendStatus(500);
+  });
+};
+
 const getUserById = (req, res) => {
   const id = parseInt(req.params.id);
 
@@ -33,4 +48,5 @@ const getUserById = (req, res) => {
 module.exports = {
   getUsers,
   getUserById,
+  postUser,
 };
