@@ -32,24 +32,28 @@ const getUsers = (req, res) => {
     .query("select * from users")
     .then(([users]) => {
       res.json(users); // use res.json instead of console.log
-      res.sendStatus(200);
     })
     .catch((err) => {
       console.error(err);
-      res.sendStatus(404);
+      res.sendStatus(500);
     });
 };
 
 const getUsersById = (req, res) => {
+  const id = parseInt(req.params.id);
+
   database
-    .query("select * from usersById")
+    .query("select * from users where id = ?", [id])
     .then(([users]) => {
-      res.json(users); // use res.json instead of console.log
-      res.sendStatus(200);
+      if (users[0] != null) {
+        res.json(users[0]);
+      } else {
+        res.sendStatus(404);
+      }
     })
     .catch((err) => {
       console.error(err);
-      res.sendStatus(404);
+      res.sendStatus(500);
     });
 };
 
