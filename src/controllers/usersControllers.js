@@ -27,37 +27,33 @@ const movies = [
 
 const database = require("../../database");
 
-const getMovies = (req, res) => {
+const getUsers = (req, res) => {
   database
-    .query("select * from movies")
-    .then(([movies]) => {
-      res.json(movies); // use res.json instead of console.log
+    .query("select * from users")
+    .then(([users]) => {
+      res.json(users); // use res.json instead of console.log
+      res.sendStatus(200);
     })
     .catch((err) => {
       console.error(err);
-      res.sendStatus(500);
+      res.sendStatus(404);
     });
 };
 
-const getMovieById = (req, res) => {
-  const id = parseInt(req.params.id);
-
+const getUsersById = (req, res) => {
   database
-    .query("select * from movies where id = ?", [id])
-    .then(([movies]) => {
-      if (movies[0] != null) {
-        res.json(movies[0]);
-      } else {
-        res.sendStatus(404);
-      }
+    .query("select * from usersById")
+    .then(([users]) => {
+      res.json(users); // use res.json instead of console.log
+      res.sendStatus(200);
     })
     .catch((err) => {
       console.error(err);
-      res.sendStatus(500);
+      res.sendStatus(404);
     });
 };
 
 module.exports = {
-  getMovies,
-  getMovieById,
+  getUsers,
+  getUsersById,
 };
