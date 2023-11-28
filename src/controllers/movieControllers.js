@@ -39,7 +39,7 @@ const getMovies = (req, res) => {
     });
 };
 
-const postMovies = (req, res) => {
+const postMovie = (req, res) => {
   const { title, director, year, color, duration } = req.body;
 
   database
@@ -77,5 +77,5 @@ const getMovieById = (req, res) => {
  module.exports = {
   getMovies,
   getMovieById,
-  postMovies,
+  postMovie,
 };
