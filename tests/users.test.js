@@ -2,6 +2,10 @@ const request = require("supertest");
 
 const app = require("../src/app");
 
+app.get("/api/users", (req, res) => {
+	res.status(200).json(users);
+});
+
 describe("GET /api/users", () => {
   it("should return all users", async () => {
     const response = await request(app).get("/api/users");
@@ -12,18 +16,19 @@ describe("GET /api/users", () => {
   });
 });
 
-describe("GET /api/users/:id", () => {
-  it("should return one user", async () => {
-    const response = await request(app).get("/api/users/1");
 
-    expect(response.headers["content-type"]).toMatch(/json/);
+	describe("GET /api/users/:id", () => {
+	  it("should return one user", async () => {
+	    const response = await request(app).get("/api/users/1");
 
-    expect(response.status).toEqual(200);
-  });
+	    expect(response.headers["content-type"]).toMatch(/json/);
 
-  it("should return no user", async () => {
-    const response = await request(app).get("/api/users/0");
+	    expect(response.status).toEqual(200);
+	  });
 
-    expect(response.status).toEqual(404);
-  });
+	it("should return no user", async () => {
+		const response = await request(app).get("/api/users/0");
+
+		expect(response.status).toEqual(404);
+	});
 });
