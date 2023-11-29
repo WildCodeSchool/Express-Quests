@@ -34,4 +34,5 @@ const getMovieById = (req, res) => {
 module.exports = {
   getMovies,
   getMovieById,
+  postMovie,
 };

@@ -27,3 +27,22 @@ describe("GET /api/movies/:id", () => {
     expect(response.status).toEqual(404);
   });
 });
+
+describe("POST /api/movies", () => {
+  it("should return created movie", async () => {
+    const newMovie = {
+      title: "Star Wars",
+      director: "George Lucas",
+      year: "1977",
+      color: "1",
+      duration: 120,
+    };
+
+    const response = await request(app).post("/api/movies").send(newMovie);
+
+    expect(response.status).toEqual(201);
+    expect(response.body).toHaveProperty("id");
+    expect(typeof response.body.id).toBe("number");
+
+  });
+});
