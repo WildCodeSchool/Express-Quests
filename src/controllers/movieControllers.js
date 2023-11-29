@@ -57,7 +57,12 @@ const getMovieById = (req, res) => {
     });
 };
 
+const postMovie = (req, res) => {
+  res.send("Post route is working 🎉");
+}
+
 module.exports = {
   getMovies,
   getMovieById,
+  postMovie,
 };
