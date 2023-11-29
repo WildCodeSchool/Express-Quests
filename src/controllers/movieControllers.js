@@ -51,5 +51,4 @@ module.exports = {
   getMovies,
   getMovieById,
   postMovie,
-
 };
