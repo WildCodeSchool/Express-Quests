@@ -30,24 +30,47 @@ const getUserById = (req, res) => {
     });
 };
 const postUser = (req, res) => {
-    const { firstname, lastname, email, city, language } = req.body;
-  
-    database
-      .query(
-        "INSERT INTO users(firstname, lastname, email, city, language) VALUES ( ?, ?, ?, ?, ?)",
-        [firstname, lastname, email, city, language]
-      )
-      .then(([result]) => {
-        res.status(201).send({ id: result.insertId });
-      })
-      .catch((err) => {
-        console.error(err);
-        res.sendStatus(500);
-      });
-  };
+  const { firstname, lastname, email, city, language } = req.body;
+
+  database
+    .query(
+      "INSERT INTO users(firstname, lastname, email, city, language) VALUES ( ?, ?, ?, ?, ?)",
+      [firstname, lastname, email, city, language]
+    )
+    .then(([result]) => {
+      res.status(201).send({ id: result.insertId });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
+
+const edit = (req, res) => {
+  const id = parseInt(req.params.id);
+  const { firstname, lastname, email, city, language } = req.body;
+
+  database
+    .query(
+      "update users set firstname = ?, lastname = ?, email = ?, city = ?, language = ? where id = ?",
+      [firstname, lastname, email, city, language, id]
+    )
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.sendStatus(404);
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
 
 module.exports = {
   getUsers,
   getUserById,
   postUser,
+  edit,
 };
