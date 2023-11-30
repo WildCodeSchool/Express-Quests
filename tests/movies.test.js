@@ -1,4 +1,5 @@
 const request = require("supertest");
+const database = require("../database.js");
 
 const app = require("../src/app");
 
@@ -44,5 +45,29 @@ describe("POST /api/movies", () => {
     expect(response.body).toHaveProperty("id");
     expect(typeof response.body.id).toBe("number");
 
+<<<<<<< HEAD
+=======
+    const [result] = await database.query(
+      "SELECT * FROM movies WHERE id=?",
+      response.body.id
+    );
+
+    const [movieInDatabase] = result;
+
+    expect(movieInDatabase).toHaveProperty("id");
+
+    expect(movieInDatabase).toHaveProperty("title");
+    expect(movieInDatabase.title).toStrictEqual(newMovie.title);
+  });
+
+  it("should return an error", async () => {
+    const movieWithMissingProps = { title: "Harry Potter" };
+
+    const response = await request(app)
+      .post("/api/movies")
+      .send(movieWithMissingProps);
+
+    expect(response.status).toEqual(500);
+>>>>>>> b14d3879a5e7ce017ecddb3ddc4e6f9c3b9da71d
   });
 });
