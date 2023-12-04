@@ -1,14 +1,11 @@
 const database = require("../../database");
 
-const postUser = (req, res) => {
-  res.send("Post route is working 🎉");
-};
 
-const getUsers = (req, res) => {
+const getMovies = (req, res) => {
   database
-    .query("select * from users")
-    .then(([users]) => {
-      res.status(200).json(users); // use res.json instead of console.log
+    .query("select * from movies")
+    .then(([movies]) => {
+      res.status(200).json(movies); // use res.json instead of console.log
     })
     .catch((err) => {
       console.error(err);
@@ -16,14 +13,14 @@ const getUsers = (req, res) => {
     });
 }
 
-const getUserById = (req, res) => {
+const getMovieById = (req, res) => {
   const id = parseInt(req.params.id);
 
   database
     .query("select * from users where id = ?", [id])
-    .then(([users]) => {
+    .then(([movies]) => {
       if (users[0] != null) {
-        res.status(200).json(users[0]);
+        res.status(200).json(movies[0]);
       } else {
         res.sendStatus(404);
       }
@@ -35,7 +32,6 @@ const getUserById = (req, res) => {
 };
 
 module.exports = {
-  getUsers,
-  getUserById,
-  postUser,
+  getMovies,
+  getMovieById,
 }
