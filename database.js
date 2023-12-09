@@ -10,13 +10,13 @@ const database = mysql.createPool({
   database: process.env.DB_NAME,
 });
 
-database
-  .query("select * from users")
-  .then(([users]) => {
-    console.log(users);
-  })
-  .catch((err) => {
-    console.error(err);
-  });
+// database
+//   .query("select * from users")
+//   .then(([users]) => {
+//     console.log(users);
+//   })
+//   .catch((err) => {
+//     console.error(err);
+//   });
 
 module.exports = database;
