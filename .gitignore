@@ -1,3 +1,4 @@
 node_modules
 .env
 /mysql-data/*
+!/mysql-data/dont-delete-folder__.md
