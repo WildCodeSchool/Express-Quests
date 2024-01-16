@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  mysql-express-container:
+    image: mysql:latest
+    container_name: mysql-express-container
+    env_file:
+      - .env
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - ./express_quests.sql:/docker-entrypoint-initdb.d/express_quests.sql
+      - ./mysql-data:/var/lib/mysql
+    networks:
+      your_network_name:
+        ipv4_address: 172.19.0.2
+
+networks:
+  your_network_name:
+    ipam:
+      config:
+        - subnet: 172.19.0.0/16
