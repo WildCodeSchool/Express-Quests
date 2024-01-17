@@ -1,19 +1,19 @@
 const database = require("../../database");
 
 // GET
-const getMovies = (req, res) => {
-  let sql = "select * from movies";
+const getUsers = (req, res) => {
+  let sql = "select * from users";
   const conditions = [];
   const sqlValues = [];
   
-  if (req.query.color != null) {
-    conditions.push("color = ?");
-    sqlValues.push(req.query.color);
+  if (req.query.language != null) {
+    conditions.push("language = ?");
+    sqlValues.push(req.query.language);
   }
 
-  if (req.query.max_duration != null) {
-      conditions.push("duration <= ?");
-      sqlValues.push(req.query.max_duration);
+  if (req.query.city != null) {
+      conditions.push("city = ?");
+      sqlValues.push(req.query.city);
   }
 
   if (conditions.length > 0) {
@@ -22,8 +22,9 @@ const getMovies = (req, res) => {
 
   database
     .query(sql, sqlValues)
-    .then(([movies]) => {
-      res.json(movies);
+    .then(([users]) => {
+        res.json(users);
+        // console.log(sql, sqlValues)
     })
     .catch((err) => {
       console.error(err);
@@ -31,14 +32,14 @@ const getMovies = (req, res) => {
     });
 };
 
-const getMovieById = (req, res) => {
+const getUserById = (req, res) => {
   const id = parseInt(req.params.id);
 
   database
-  .query("select * from movies where id = ?", [id])
-  .then(([movies]) => {
-    if (movies[0] != null) {
-        res.json(movies[0]);
+    .query("select * from users where id = ?", [id])
+    .then(([users]) => {
+      if (users[0] != null) {
+        res.json(users[0]);
       } else {
         res.sendStatus(404);
       }
@@ -47,16 +48,16 @@ const getMovieById = (req, res) => {
       console.error(err);
       res.sendStatus(500);
     });
-  };
+};
 
 // POST
-const postMovie = (req, res) => {
-  const { title, director, year, color, duration } = req.body;
+const postUser = (req, res) => {
+  const { firstname, lastname, email, city, language } = req.body;
 
   database
     .query(
-      "INSERT INTO movies(title, director, year, color, duration) VALUES (?, ?, ?, ?, ?)",
-      [title, director, year, color, duration]
+      "INSERT INTO users(firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)",
+      [firstname, lastname, email, city, language]
     )
     .then(([result]) => {
       res.status(201).send({ id: result.insertId})
@@ -67,16 +68,15 @@ const postMovie = (req, res) => {
     });
 };
 
-
 // PUT
-const updateMovie = (req, res) => {
+const updateUser = (req, res) => {
   const id = parseInt(req.params.id);
-  const { title, director, year, color, duration } = req.body;
+  const { firstname, lastname, email, city, language } = req.body;
 
   database
   .query(
-    "update movies set title = ?, director = ?, year = ?, color = ?, duration = ? where id = ?", 
-    [title, director, year, color, duration, id]
+    "update users set firstname = ?, lastname = ?, email = ?, city = ?, language = ? where id = ?", 
+    [firstname, lastname, email, city, language, id]
   )
   .then(([result]) => {
     if (result.affectedRows === 0) {
@@ -92,11 +92,11 @@ const updateMovie = (req, res) => {
 };
 
 // DELETE
-const deleteMovie = (req, res) => {
+const deleteUser = (req, res) => {
   const id = parseInt(req.params.id);
 
   database
-  .query("delete from movies where id = ?", [id])
+  .query("delete from users where id = ?", [id])
   .then(([result]) => {
     if (result.affectedRows === 0) {
       res.sendStatus(404);
@@ -110,12 +110,10 @@ const deleteMovie = (req, res) => {
   });
 };
 
-
-// Exports
 module.exports = {
-  getMovies,
-  getMovieById,
-  postMovie,
-  updateMovie,
-  deleteMovie,
+  getUsers,
+  getUserById,
+  postUser,
+  updateUser,
+  deleteUser,
 };
