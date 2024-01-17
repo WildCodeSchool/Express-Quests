@@ -35,6 +35,15 @@ describe("GET /api/movies/:id", () => {
 
 // POST
 describe("POST /api/movies", () => {
+  let createdMovieId;
+
+  afterEach(async () => {
+    if (createdMovieId) {
+      await database.query("DELETE FROM movies WHERE id=?", createdMovieId);
+      createdMovieId = null;
+    }
+  });
+
   it("should return created movie", async () => {
    const newMovie = {
       title: "Star Wars",
@@ -45,6 +54,8 @@ describe("POST /api/movies", () => {
     };
 
     const response = await request(app).post("/api/movies").send(newMovie);
+
+    createdMovieId = response.body.id;
 
     expect(response.status).toEqual(201);
     expect(response.body).toHaveProperty("id");
@@ -89,6 +100,15 @@ describe("POST /api/movies", () => {
 
 // PUT
 describe("PUT /api/movies/:id", () => {
+  let createdMovieId;
+
+  afterEach(async () => {
+    if (createdMovieId) {
+      await database.query("DELETE FROM movies WHERE id=?", createdMovieId);
+      createdMovieId = null;
+    }
+  });
+
   it("should edit movie", async () => {
     const newMovie = {
       title: "Avatar",
@@ -104,6 +124,7 @@ describe("PUT /api/movies/:id", () => {
     );
 
     const id = result.insertId;
+    createdMovieId = id
 
     const updatedMovie = {
       title: "Wild is life",
@@ -161,6 +182,43 @@ describe("PUT /api/movies/:id", () => {
     };
 
     const response = await request(app).put("/api/movies/0").send(newMovie);
+
+    expect(response.status).toEqual(404);
+  });
+});
+
+// DELETE
+describe("DELETE /api/movies/:id", () => {
+  it("should delete a movie", async () => {
+    // First, insert a movie into the database
+    const newMovie = {
+      title: "Test Movie",
+      director: "Test Director",
+      year: "2022",
+      color: "1",
+      duration: 100,
+    };
+
+    const [result] = await database.query(
+      "INSERT INTO movies(title, director, year, color, duration) VALUES (?, ?, ?, ?, ?)",
+      [newMovie.title, newMovie.director, newMovie.year, newMovie.color, newMovie.duration]
+    );
+
+    const id = result.insertId;
+
+    // Then, try to delete it
+    const response = await request(app).delete(`/api/movies/${id}`);
+
+    expect(response.status).toEqual(204);
+
+    // Finally, check that it was deleted
+    const [movies] = await database.query("SELECT * FROM movies WHERE id=?", id);
+
+    expect(movies.length).toEqual(0);
+  });
+
+  it("should return an error if the movie does not exist", async () => {
+    const response = await request(app).delete("/api/movies/0");
 
     expect(response.status).toEqual(404);
   });
