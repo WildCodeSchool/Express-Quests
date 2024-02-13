@@ -59,6 +59,39 @@ const getMovieById = (req, res) => {
 
 
 
+
+const getUsers = (req, res) => {
+  database
+    .query("select * from users")
+    .then(([users]) => {
+      res.json(users); // use res.json instead of console.log
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
+
+const getUserById = (req, res) => {
+  const id = parseInt(req.params.id);
+
+  database
+    .query("select * from users where id = ?", [id])
+    .then(([users]) => {
+      if (users[0] != null) {
+        res.json(users[0]);
+      } else {
+        res.sendStatus(404);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
+
+
+
 const postMovie = (req, res) => {
   const { title, director, year, color, duration } = req.body;
 
@@ -98,16 +131,21 @@ const postUser = (req, res) => {
 };
 
 
+const updateMovie = (req, res) => {
+  const id = parseInt(req.params.id);
+  const { title, director, year, color, duration } = req.body;
 
-
-
-
-
-const getUsers = (req, res) => {
   database
-    .query("select * from users")
-    .then(([users]) => {
-      res.json(users); // use res.json instead of console.log
+    .query(
+      "update movies set title = ?, director = ?, year = ?, color = ?, duration = ? where id = ?",
+      [title, director, year, color, duration, id]
+    )
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.sendStatus(404);
+      } else {
+        res.sendStatus(204);
+      }
     })
     .catch((err) => {
       console.error(err);
@@ -115,16 +153,21 @@ const getUsers = (req, res) => {
     });
 };
 
-const getUserById = (req, res) => {
+
+const updateUser = (req, res) => {
   const id = parseInt(req.params.id);
+  const { firstname, lastname, email, city, language } = req.body;
 
   database
-    .query("select * from users where id = ?", [id])
-    .then(([users]) => {
-      if (users[0] != null) {
-        res.json(users[0]);
-      } else {
+    .query(
+      "update users set firstname = ?, lastname = ?, email = ?, city = ?, language = ? where id = ?",
+      [firstname, lastname, email, city, language, id]
+    )
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
         res.sendStatus(404);
+      } else {
+        res.sendStatus(204);
       }
     })
     .catch((err) => {
@@ -136,6 +179,8 @@ const getUserById = (req, res) => {
 
 
 
+
+
 module.exports = {
   getMovies,
   getMovieById,
@@ -143,4 +188,6 @@ module.exports = {
   getUserById,
   postMovie,
   postUser,
+  updateMovie,
+  updateUser,
 };
