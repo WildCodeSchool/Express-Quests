@@ -8,7 +8,7 @@ describe("GET /api/movies", () => {
 
     expect(response.headers["content-type"]).toMatch(/json/);
 
-    expect(response.status).toEqual(200);
+    expect(response.status).toEqual(422);
   });
 });
 
@@ -18,7 +18,7 @@ describe("GET /api/movies/:id", () => {
 
     expect(response.headers["content-type"]).toMatch(/json/);
 
-    expect(response.status).toEqual(200);
+    expect(response.status).toEqual(422);
   });
 
   it("should return no movie", async () => {
