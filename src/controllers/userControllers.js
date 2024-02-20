@@ -3,21 +3,27 @@ const database = require("../../database");
 const users = [
   {
     id: 1,
-    name: "Paul Dubor",
+    firstname: "Paul",
+    lastname: "Dubor",
     email: "paul@wildecodeschool.com",
-    age: 28,
+    city: "Bordeaux",
+    language: "Francais",
   },
   {
     id: 2,
-    name: "India",
+    firstname: "India",
+    lastname: "Chameroy",
     email: "india@wildecodeschool.com",
-    age: 30,
+    city: "Bordeaux",
+    language: "Francais",
   },
   {
     id: 3,
-    name: "Hyppo",
+    firstname: "Hyppo",
+    lastname: "Chameroy",
     email: "hyppo@wildecodeschool.com",
-    age: 22,
+    city: "Bordeaux",
+    language: "Francais",
   },
 ];
 
@@ -37,14 +43,13 @@ const getUserById = (req, res) => {
 };
 
 const postUser = (req, res) => {
-  const { name, email, age } = req.body;
+  const { firstname, lastname, email, city, language } = req.body;
 
   database
-    .query("INSERT INTO users(name, email, age) VALUES (?, ?, ?)", [
-      name,
-      email,
-      age,
-    ])
+    .query(
+      "INSERT INTO users(firstname, lastname, email, city, language) VALUES (?, ?, ?, ?, ?)",
+      [firstname, lastname, email, city, language]
+    )
     .then(([result]) => {
       res.status(201).send({ id: result.insertId });
     })
@@ -80,7 +85,7 @@ const deleteUser = (req, res) => {
   const id = parseInt(req.params.id);
 
   database
-    .query("delete from users where id = ?", [id])
+    .query("DELETE FROM users WHERE id = ?", [id])
     .then(([result]) => {
       if (result.affectedRows === 0) {
         res.sendStatus(404);

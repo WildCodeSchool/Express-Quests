@@ -2,6 +2,8 @@ const express = require("express");
 
 const app = express();
 
+app.use(express.json());
+
 const movieControllers = require("./controllers/movieControllers");
 const userControllers = require("./controllers/userControllers");
 
