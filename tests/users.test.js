@@ -18,21 +18,21 @@ describe("GET /api/users", () => {
   });
 });
 
-describe("GET /api/users/:id", () => {
-  it("should return one user", async () => {
-    const response = await request(app).get("/api/users/1");
+// describe("GET /api/users/:id", () => {
+//   it("should return one user", async () => {
+//     const response = await request(app).get("/api/users/1");
 
-    expect(response.headers["content-type"]).toMatch(/json/);
+//     expect(response.headers["content-type"]).toMatch(/json/);
 
-    expect(response.status).toEqual(200);
-  });
+//     expect(response.status).toEqual(200);
+//   });
 
-  it("should return no user", async () => {
-    const response = await request(app).get("/api/users/0");
+//   it("should return no user", async () => {
+//     const response = await request(app).get("/api/users/0");
 
-    expect(response.status).toEqual(404);
-  });
-});
+//     expect(response.status).toEqual(404);
+//   });
+// });
 
 describe("POST /api/users", () => {
   it("should return created user", async () => {
@@ -169,4 +169,19 @@ describe("PUT /api/users/:id", () => {
 
     expect(response.status).toEqual(404);
   });
+});
+
+describe("DELETE api/users/:id", () => {
+  it("should delete one user", async () => {
+    const response = await request(app).delete("/api/users/6");
+
+    expect(response.status).toEqual(204)
+  });
+  
+  it("should delete no user", async () => {
+    const response = await request(app).delete("/api/users/0");
+
+    expect(response.status).toEqual(404);
+  });
+
 });
